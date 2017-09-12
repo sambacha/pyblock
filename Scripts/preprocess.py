@@ -3,6 +3,7 @@
 import subprocess
 import sys
 sys.path.append("./../Preprocessing")
+sys.path.append("./../Preprocessing/Crawler")
 sys.path.append("./../Analysis")
 import os
 os.environ['ETH_BLOCKCHAIN_ANALYSIS_DIR'] = './../Preprocessing/'

@@ -52,6 +52,7 @@ class Crawler(object):
 
     """
 
+
     def __init__(
         self,
         start=True,
@@ -77,6 +78,8 @@ class Crawler(object):
         # The delay between requests to geth
         self.delay = delay
 
+        self.session=requests.Session()
+
         if start:
             self.max_block_mongo = self.highestBlockMongo()
             self.max_block_geth = self.highestBlockEth()
@@ -90,15 +93,16 @@ class Crawler(object):
             "jsonrpc": "2.0",
             "id": 0
         }
-        time.sleep(self.delay)
-        res = requests.post(
+        """time.sleep(self.delay)"""
+        data=json.dumps(payload)
+        res = self.session.post(
               self.url,
-              data=json.dumps(payload),
-              headers=self.headers).json()
+              data, stream=True).json()
         return res[key]
 
     def getBlock(self, n):
         """Get a specific block from the blockchain and filter the data."""
+
         data = self._rpcRequest("eth_getBlockByNumber", [n, True], "result")
         block = crawler_util.decodeBlock(data)
         return block
@@ -122,6 +126,7 @@ class Crawler(object):
 
     def add_block(self, n):
         """Add a block to mongo."""
+
         b = self.getBlock(n)
         if b:
             self.saveBlock(b)
@@ -168,6 +173,6 @@ class Crawler(object):
         # Get all new blocks
         print("Processing remainder of the blockchain...")
         for n in tqdm.tqdm(range(self.max_block_mongo, self.max_block_geth)):
-            self.add_block(n)
+            self.add_block(hex(n))
 
         print("Done!\n")
