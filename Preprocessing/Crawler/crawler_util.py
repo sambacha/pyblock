@@ -4,7 +4,7 @@ from collections import deque
 import os
 import pdb
 
-DB_NAME = "blockchain"
+DB_NAME = "ethereum13"
 COLLECTION = "transactions"
 
 # mongodb
@@ -52,7 +52,7 @@ def insertMongo(client, d):
     error <None or str>
     """
     try:
-        client.insert_one(d)
+        client.insert_many(d)
         return None
     except Exception as err:
         pass
@@ -73,7 +73,7 @@ def highestBlock(client):
     n = client.find_one(sort=[("number", pymongo.DESCENDING)])
     if not n:
         # If the database is empty, the highest block # is 0
-        return 0
+        return -1
     assert "number" in n, "Highest block is incorrectly formatted"
     return n["number"]
 
@@ -145,6 +145,7 @@ def decodeBlock(block):
   	}
     """
     try:
+        txs = []
         b = block
         if "result" in block:
             b = block["result"]
@@ -158,14 +159,34 @@ def decodeBlock(block):
         # 	Value, gas, and gasPrice are all converted to ether
         for t in b["transactions"]:
             new_t = {
+                "number": int(b["number"], 16),
+                "timestamp": int(b["timestamp"], 16),
                 "from": t["from"],
                 "to": t["to"],
-                "value": float(int(t["value"], 16))/1000000000000000000.,
-                "data": t["input"]
+                "value": float(int(t["value"], 16))/1000000000000000000.
             }
-            new_block["transactions"].append(new_t)
-        return new_block
+            txs.append(new_t)
+        return txs
 
+    except:
+        return None
+
+
+def decode_genesis_block(block):
+    try:
+        txs = []
+        i = 0
+        for x in block.keys():
+            new_t ={
+                "number": i,
+                "timestamp": int("0x0", 16),
+                "from": "Genesis",
+                "to": x,
+                "value": float(block[x]["wei"])/1000000000000000000.
+            }
+            txs.append(new_t)
+            i += 1
+        return txs
     except:
         return None
 

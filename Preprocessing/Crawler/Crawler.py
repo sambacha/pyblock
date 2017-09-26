@@ -148,7 +148,7 @@ class Crawler(object):
 
         # Make sure the database isn't missing any blocks up to this point
         logging.debug("Verifying that mongo isn't missing any blocks...")
-        self.max_block_mongo = 1
+        self.max_block_mongo = 0
         if len(self.block_queue) > 0:
             print("Looking for missing blocks...")
             self.max_block_mongo = self.block_queue.pop()
@@ -171,6 +171,11 @@ class Crawler(object):
                         logging.info("Added block {}".format(n))
 
         # Get all new blocks
+        
+        with open('genesis_block.json') as data_file:
+            data = json.load(data_file)
+        genesis = crawler_util.decode_genesis_block(data)
+        self.saveBlock(genesis)
         print("Processing remainder of the blockchain...")
         for n in tqdm.tqdm(range(self.max_block_mongo, self.max_block_geth)):
             self.add_block(hex(n))
