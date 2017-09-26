@@ -3,8 +3,9 @@ import pymongo
 from collections import deque
 import os
 import pdb
+import pprint
 
-DB_NAME = "ethereum13"
+DB_NAME = "ethereum22"
 COLLECTION = "transactions"
 
 # mongodb
@@ -29,7 +30,7 @@ def initMongo(client):
     try:
         # Index the block number so duplicate records cannot be made
         db[COLLECTION].create_index(
-			[("number", pymongo.DESCENDING)],
+			[("blockNumber", pymongo.DESCENDING)("txNumber", pymongo.DESCENDING)],
 			unique=True
 		)
     except:
@@ -70,12 +71,12 @@ def highestBlock(client):
     --------
     <int>
     """
-    n = client.find_one(sort=[("number", pymongo.DESCENDING)])
+    n = client.find_one(sort=[("blockNumber", pymongo.DESCENDING)])
     if not n:
         # If the database is empty, the highest block # is 0
         return -1
-    assert "number" in n, "Highest block is incorrectly formatted"
-    return n["number"]
+    assert "blockNumber" in n, "Highest block is incorrectly formatted"
+    return n["blockNumber"]
 
 
 def makeBlockQueue(client):
@@ -91,10 +92,10 @@ def makeBlockQueue(client):
     <deque>
     """
     queue = deque()
-    all_n = client.find({}, {"number":1, "_id":0},
-    		sort=[("number", pymongo.ASCENDING)])
+    all_n = client.find({}, {"blockNumber":1, "_id":0},
+    		sort=[("blockNumber", pymongo.ASCENDING)])
     for i in all_n:
-        queue.append(i["number"])
+        queue.append(i["blockNumber"])
     return queue
 
 # Geth
@@ -157,15 +158,32 @@ def decodeBlock(block):
         }
         # Filter and decode each transaction and add it back
         # 	Value, gas, and gasPrice are all converted to ether
+        reward = float(5.)    
+        i = 1
         for t in b["transactions"]:
+            if t["to"] == None:
+                print("NULL")
             new_t = {
-                "number": int(b["number"], 16),
+                "blockNumber": int(b["number"], 16),
+                "txNumber": i,
                 "timestamp": int(b["timestamp"], 16),
                 "from": t["from"],
                 "to": t["to"],
                 "value": float(int(t["value"], 16))/1000000000000000000.
             }
+            reward += float(int(t["gas"],16)*int(t["gasPrice"],16))/1000000000000000000.
             txs.append(new_t)
+            i += 1
+        '''print(reward)'''
+        rewardX = {
+            "blockNumber": int(b["number"], 16),
+            "txNumber": 0,
+            "timestamp": int(b["timestamp"], 16),
+            "from": "REWARD",
+            "to": b["miner"],
+            "value": reward
+        }
+        txs.append(rewardX)
         return txs
 
     except:
@@ -178,7 +196,8 @@ def decode_genesis_block(block):
         i = 0
         for x in block.keys():
             new_t ={
-                "number": i,
+                "blockNumber": 0,
+                "txNumber": i,
                 "timestamp": int("0x0", 16),
                 "from": "Genesis",
                 "to": x,

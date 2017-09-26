@@ -132,7 +132,7 @@ class Crawler(object):
             self.saveBlock(b)
             time.sleep(0.001)
         else:
-            self.saveBlock({"number": n, "transactions": []})
+            self.saveBlock({"blockNumber": n, "transactions": []})
 
     def run(self):
         """
