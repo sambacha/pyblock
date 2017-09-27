@@ -4,8 +4,10 @@ from collections import deque
 import os
 import pdb
 import pprint
+from pyethereum.ethereum.utils import encode_hex
+from pyethereum.ethereum.utils import mk_contract_address
 
-DB_NAME = "ethereum22"
+DB_NAME = "ethereum36"
 COLLECTION = "transactions"
 
 # mongodb
@@ -160,15 +162,20 @@ def decodeBlock(block):
         # 	Value, gas, and gasPrice are all converted to ether
         reward = float(5.)    
         i = 1
+        to = "to"
         for t in b["transactions"]:
             if t["to"] == None:
-                print("NULL")
+                to = encode_hex(mk_contract_address(t["from"],int(t["nonce"], 16)))
+            else:
+                to = t["to"]
+                
+            print(to)
             new_t = {
                 "blockNumber": int(b["number"], 16),
                 "txNumber": i,
                 "timestamp": int(b["timestamp"], 16),
                 "from": t["from"],
-                "to": t["to"],
+                "to": to,
                 "value": float(int(t["value"], 16))/1000000000000000000.
             }
             reward += float(int(t["gas"],16)*int(t["gasPrice"],16))/1000000000000000000.
