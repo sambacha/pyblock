@@ -7,7 +7,7 @@ import pprint
 from pyethereum.ethereum.utils import encode_hex
 from pyethereum.ethereum.utils import mk_contract_address
 
-DB_NAME = "ethereum36"
+DB_NAME = "ethereum42"
 COLLECTION = "transactions"
 
 # mongodb
@@ -163,20 +163,21 @@ def decodeBlock(block):
         reward = float(5.)    
         i = 1
         to = "to"
+        isContract = False
         for t in b["transactions"]:
             if t["to"] == None:
-                to = encode_hex(mk_contract_address(t["from"],int(t["nonce"], 16)))
+                to = "0x"+encode_hex(mk_contract_address(t["from"],int(t["nonce"], 16)))
+                isContract = True
             else:
                 to = t["to"]
-                
-            print(to)
             new_t = {
                 "blockNumber": int(b["number"], 16),
                 "txNumber": i,
                 "timestamp": int(b["timestamp"], 16),
                 "from": t["from"],
                 "to": to,
-                "value": float(int(t["value"], 16))/1000000000000000000.
+                "value": float(int(t["value"], 16))/1000000000000000000.,
+                "isContract": isContract
             }
             reward += float(int(t["gas"],16)*int(t["gasPrice"],16))/1000000000000000000.
             txs.append(new_t)
@@ -188,7 +189,8 @@ def decodeBlock(block):
             "timestamp": int(b["timestamp"], 16),
             "from": "REWARD",
             "to": b["miner"],
-            "value": reward
+            "value": reward,
+            "isContract": isContract
         }
         txs.append(rewardX)
         return txs
@@ -208,7 +210,8 @@ def decode_genesis_block(block):
                 "timestamp": int("0x0", 16),
                 "from": "Genesis",
                 "to": x,
-                "value": float(block[x]["wei"])/1000000000000000000.
+                "value": float(block[x]["wei"])/1000000000000000000. ,
+                "isContract": False
             }
             txs.append(new_t)
             i += 1

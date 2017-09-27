@@ -178,6 +178,6 @@ class Crawler(object):
         self.saveBlock(genesis)
         print("Processing remainder of the blockchain...")
         for n in tqdm.tqdm(range(self.max_block_mongo, self.max_block_geth)):
-            self.add_block(hex(n+45000))
+            self.add_block(hex(n))
 
         print("Done!\n")
