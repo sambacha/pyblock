@@ -7,8 +7,9 @@ import pprint
 from pyethereum.ethereum.utils import encode_hex
 from pyethereum.ethereum.utils import mk_contract_address
 
-DB_NAME = "ethereum42"
+DB_NAME = "eth0004"
 COLLECTION = "transactions"
+contractAddresses = []
 
 # mongodb
 # -------
@@ -163,40 +164,47 @@ def decodeBlock(block):
         reward = float(5.)    
         i = 1
         to = "to"
-        isContract = False
+        isContractCreation = False
+        fromContract = False
+        toContract = False
         for t in b["transactions"]:
             if t["to"] == None:
                 to = "0x"+encode_hex(mk_contract_address(t["from"],int(t["nonce"], 16)))
-                isContract = True
+                isContractCreation = True
+                contractAddresses.append(to)
+            elif t["to"] in contractAddresses:
+                toContract = True
             else:
                 to = t["to"]
-            new_t = {
-                "blockNumber": int(b["number"], 16),
-                "txNumber": i,
-                "timestamp": int(b["timestamp"], 16),
-                "from": t["from"],
-                "to": to,
-                "value": float(int(t["value"], 16))/1000000000000000000.,
-                "isContract": isContract
-            }
+            if t["from"] in contractAddresses:
+                fromContract = True
+            tx = makeTx(b["number"],i,b["timestamp"],t["from"],to,float(int(t["value"], 16))/1000000000000000000.,isContractCreation,t["input"],t["gas"],t["gasPrice"],fromContract,toContract)
             reward += float(int(t["gas"],16)*int(t["gasPrice"],16))/1000000000000000000.
-            txs.append(new_t)
+            txs.append(tx)
             i += 1
-        '''print(reward)'''
-        rewardX = {
-            "blockNumber": int(b["number"], 16),
-            "txNumber": 0,
-            "timestamp": int(b["timestamp"], 16),
-            "from": "REWARD",
-            "to": b["miner"],
-            "value": reward,
-            "isContract": isContract
-        }
-        txs.append(rewardX)
+        rewardTx = makeTx(b["number"],0,b["timestamp"],"REWARD",b["miner"],reward,isContractCreation,"","0x0","0x0",False,False)
+        txs.append(rewardTx)
         return txs
 
     except:
         return None
+
+def makeTx(blockNumber,txNumber,timestamp,sender,to,value,isContractCreation,data,gas,gasPrice,fromContract,toContract):
+    tx = {
+        "blockNumber": int(blockNumber, 16),
+        "txNumber": txNumber,
+        "timestamp": int(timestamp, 16),
+        "from": sender,
+        "to": to,
+        "value": value,
+        "isContractCreation": isContractCreation,
+        "inputData": data,
+        "gas": int(gas, 16),
+        "gasPrice": int(gasPrice, 16),
+        "fromContract": fromContract,
+        "toContract": toContract
+    }
+    return tx
 
 
 def decode_genesis_block(block):
@@ -204,16 +212,8 @@ def decode_genesis_block(block):
         txs = []
         i = 0
         for x in block.keys():
-            new_t ={
-                "blockNumber": 0,
-                "txNumber": i,
-                "timestamp": int("0x0", 16),
-                "from": "Genesis",
-                "to": x,
-                "value": float(block[x]["wei"])/1000000000000000000. ,
-                "isContract": False
-            }
-            txs.append(new_t)
+            tx = makeTx("0x0",0,"0x0","Genesis",x,float(block[x]["wei"])/1000000000000000000.,False,"","0x0","0x0",False,False)
+            txs.append(tx)
             i += 1
         return txs
     except:
