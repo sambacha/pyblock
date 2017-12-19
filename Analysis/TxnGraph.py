@@ -204,6 +204,8 @@ class TxnGraph(object):
         for addr in addresses.keys():
             self.nodes[addr] = self.graph.add_vertex()
             self.vertexWeights[self.nodes[addr]] = 1
+            self.addresses[self.nodes[addr]] = addr
+
 
     def _addEdges(self, client):
         blocks = client.find(
