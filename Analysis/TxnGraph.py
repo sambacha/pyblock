@@ -256,7 +256,6 @@ class TxnGraph(object):
                     self._addEdgeWeight(newEdge,txn["value"])
 
         self._addPropertyMaps()
-        print("DONE Updating DOllar Price")
 
 
         print(graph_tool.centrality.pagerank(self.graph))
