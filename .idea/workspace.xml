@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45b2ae26-3ba5-4197-ac7c-30f72f01cc29" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Scripts/queries.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Analysis/TxnGraph.py" afterPath="$PROJECT_DIR$/Analysis/TxnGraph.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/powerLaw.svg" afterPath="$PROJECT_DIR$/Scripts/powerLaw.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/readGraph.py" afterPath="$PROJECT_DIR$/Scripts/readGraph.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,124 +16,78 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6588542">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-          <file leaf-file-name="stream.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/stream.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="294">
-                  <caret line="15" column="18" lean-forward="false" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="preprocess.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Scripts/preprocess.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="336">
-                  <caret line="17" column="1" lean-forward="false" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Crawler.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Preprocessing/Crawler/Crawler.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="926">
-                  <caret line="87" column="13" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="13" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="draw_graphs.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Scripts/draw_graphs.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="672">
-                  <caret line="32" column="23" lean-forward="false" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="TxnGraph.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Analysis/TxnGraph.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="309">
-                  <caret line="47" column="8" lean-forward="false" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="8" />
-                  <folding>
-                    <element signature="e#50#84#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="builtins.py" pinned="false" current-in-tab="false">
-            <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/1602740496/builtins.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="17157">
-                  <caret line="817" column="5" lean-forward="false" selection-start-line="817" selection-start-column="5" selection-end-line="817" selection-end-column="5" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="gexf.py" pinned="false" current-in-tab="false">
-            <entry file="file://C:/Python3/Lib/site-packages/networkx/readwrite/gexf.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="17199">
-                  <caret line="823" column="8" lean-forward="false" selection-start-line="823" selection-start-column="8" selection-end-line="823" selection-end-column="8" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ContractMap.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Analysis/ContractMap.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="926">
-                  <caret line="161" column="0" lean-forward="false" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-          <file leaf-file-name="crawler_util.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Preprocessing/Crawler/crawler_util.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="105">
-                  <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#58#72#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="crawler_util.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Preprocessing/Crawler/crawler_util.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="827">
+              <caret line="171" column="9" lean-forward="true" selection-start-line="171" selection-start-column="9" selection-end-line="171" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="preprocess.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scripts/preprocess.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="680">
+              <caret line="18" column="16" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Crawler.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Preprocessing/Crawler/Crawler.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1095">
+              <caret line="237" column="58" lean-forward="true" selection-start-line="237" selection-start-column="58" selection-end-line="237" selection-end-column="58" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="draw_graphs.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scripts/draw_graphs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="400">
+              <caret line="10" column="11" lean-forward="false" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="queries.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Scripts/queries.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TxnGraph.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Analysis/TxnGraph.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1800">
+              <caret line="132" column="13" lean-forward="false" selection-start-line="132" selection-start-column="13" selection-end-line="132" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>&quot;transac</find>
-      <find>addedgeWe</find>
-      <find>uncles</find>
-      <find>add_vert</find>
-      <find>xx</find>
-      <find>print</find>
-      <find>extend</find>
-      <find>insertmongo</find>
-      <find>insertmon</find>
-      <find>err</find>
-      <find>decode</find>
       <find>timestamp</find>
       <find>insert</find>
       <find>end</find>
@@ -141,7 +97,6 @@
       <find>counter</find>
       <find>pickle</find>
       <find>'weight</find>
-      <find>'weight'</find>
       <find>prop</find>
       <find>4370</find>
       <find>rpcreq</find>
@@ -151,6 +106,18 @@
       <find>addver</find>
       <find>propert</find>
       <find>draw</find>
+      <find>weight</find>
+      <find>'weight'</find>
+      <find>&quot;weight&quot;</find>
+      <find>time</find>
+      <find>parsed</find>
+      <find>getpr</find>
+      <find>client.up</find>
+      <find>$set</find>
+      <find>decode</find>
+      <find>unwind</find>
+      <find>decodeblo</find>
+      <find>extended</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -160,13 +127,14 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="C:/Python3/Lib/site-packages/pymongo/collection.py" />
-        <option value="$PROJECT_DIR$/Preprocessing/Crawler/Crawler.py" />
         <option value="$PROJECT_DIR$/Analysis/ContractMap.py" />
         <option value="$PROJECT_DIR$/Scripts/data/draw_graphs.py" />
         <option value="$PROJECT_DIR$/Scripts/draw_graphs.py" />
         <option value="$PROJECT_DIR$/Scripts/preprocess.py" />
         <option value="$PROJECT_DIR$/Preprocessing/Crawler/crawler_util.py" />
+        <option value="$PROJECT_DIR$/Preprocessing/Crawler/Crawler.py" />
         <option value="$PROJECT_DIR$/Analysis/TxnGraph.py" />
+        <option value="$PROJECT_DIR$/Scripts/queries.py" />
       </list>
     </option>
   </component>
@@ -179,11 +147,10 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1911" />
-    <option name="y" value="-9" />
-    <option name="width" value="1938" />
-    <option name="height" value="1168" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-14" />
+    <option name="width" value="1948" />
+    <option name="height" value="2074" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -219,6 +186,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -251,7 +219,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -259,7 +226,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="SearchEverywhereHistoryKey" value="response&#9;null&#9;null&#10;tags&#9;null&#9;null&#10;mongocl&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="crawler&#9;FILE&#9;file://C:/Users/mhvog/git/fork/Ethereum_Blockchain_Parser/Preprocessing/Crawler/Crawler.py&#10;pr&#9;FILE&#9;file://C:/Users/mhvog/git/fork/Ethereum_Blockchain_Parser/Scripts/preprocess.py&#10;util&#9;FILE&#9;file://C:/Users/mhvog/git/fork/Ethereum_Blockchain_Parser/Preprocessing/Crawler/crawler_util.py&#10;txn&#9;FILE&#9;file://C:/Users/mhvog/git/fork/Ethereum_Blockchain_Parser/Analysis/TxnGraph.py&#10;response&#9;null&#9;null&#10;tags&#9;null&#9;null&#10;mongocl&#9;null&#9;null" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -290,10 +257,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1911" y="-9" width="1938" height="1168" extended-state="6" />
+    <frame x="-14" y="0" width="1948" height="2074" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -327,22 +294,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Analysis/ContractMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/preprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Analysis/ParsedBlocks.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2667">
@@ -391,7 +342,7 @@
         <state relative-caret-position="924">
           <caret line="47" column="11" lean-forward="false" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="11" />
           <folding>
-            <element signature="e#58#72#0" expanded="true" />
+            <element signature="e#58#72#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -417,7 +368,7 @@
         <state relative-caret-position="3171">
           <caret line="159" column="34" lean-forward="false" selection-start-line="159" selection-start-column="34" selection-end-line="159" selection-end-column="34" />
           <folding>
-            <element signature="e#50#84#0" expanded="true" />
+            <element signature="e#50#84#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -493,7 +444,7 @@
         <state relative-caret-position="924">
           <caret line="47" column="11" lean-forward="false" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="11" />
           <folding>
-            <element signature="e#58#72#0" expanded="true" />
+            <element signature="e#58#72#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -575,7 +526,7 @@
     </entry>
     <entry file="file://C:/Python3/Lib/site-packages/networkx/readwrite/gexf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17199">
+        <state relative-caret-position="32760">
           <caret line="823" column="8" lean-forward="false" selection-start-line="823" selection-start-column="8" selection-end-line="823" selection-end-column="8" />
           <folding />
         </state>
@@ -585,13 +536,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2690">
           <caret line="597" column="22" lean-forward="false" selection-start-line="597" selection-start-column="22" selection-end-line="597" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/ParsedBlocks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="71" column="47" lean-forward="false" selection-start-line="71" selection-start-column="42" selection-end-line="71" selection-end-column="47" />
         </state>
       </provider>
     </entry>
@@ -640,70 +584,89 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Scripts/data/draw_graphs.py" />
-    <entry file="file://$PROJECT_DIR$/Preprocessing/Crawler/crawler_util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding>
-            <element signature="e#58#72#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/1602740496/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17157">
+        <state relative-caret-position="32680">
           <caret line="817" column="5" lean-forward="false" selection-start-line="817" selection-start-column="5" selection-end-line="817" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/draw_graphs.py">
+    <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="32" column="23" lean-forward="false" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
-          <folding />
+        <state relative-caret-position="831">
+          <caret line="130" column="61" lean-forward="false" selection-start-line="130" selection-start-column="61" selection-end-line="130" selection-end-column="61" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/TxnGraph.py">
+    <entry file="file://$PROJECT_DIR$/Analysis/ParsedBlocks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="47" column="8" lean-forward="false" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="8" />
-          <folding>
-            <element signature="e#50#84#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/ContractMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="926">
-          <caret line="161" column="0" lean-forward="false" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Preprocessing/Crawler/Crawler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="926">
-          <caret line="87" column="13" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/preprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="17" column="1" lean-forward="false" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+        <state relative-caret-position="200">
+          <caret line="9" column="10" lean-forward="false" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/stream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="15" column="18" lean-forward="false" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
+        <state relative-caret-position="-1269">
+          <caret line="6" column="29" lean-forward="false" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Analysis/ContractMap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-755">
+          <caret line="106" column="41" lean-forward="false" selection-start-line="106" selection-start-column="41" selection-end-line="106" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Preprocessing/Crawler/Crawler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1095">
+          <caret line="237" column="58" lean-forward="true" selection-start-line="237" selection-start-column="58" selection-end-line="237" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/preprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="18" column="16" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Analysis/TxnGraph.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1800">
+          <caret line="132" column="13" lean-forward="false" selection-start-line="132" selection-start-column="13" selection-end-line="132" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Preprocessing/Crawler/crawler_util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="827">
+          <caret line="171" column="9" lean-forward="true" selection-start-line="171" selection-start-column="9" selection-end-line="171" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/draw_graphs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="10" column="11" lean-forward="false" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/queries.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

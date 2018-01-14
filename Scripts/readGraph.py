@@ -4,6 +4,7 @@ from pylab import *
 import time
 from graph_tool.all import *
 import graph_tool
+import numpy
 import matplotlib.pyplot as plt
 from collections import Counter
 
@@ -21,16 +22,17 @@ outdegrees = []
 comdegrees = []
 
 
-
 for i in tmp_graph.vertices():
 	indegrees.append(i.in_degree())
+print("In After: " + str(time.time()-t))
 
 for i in tmp_graph.vertices():
 	outdegrees.append(i.out_degree())
+print("Out After: " + str(time.time()-t))
 
 for i in tmp_graph.vertices():
 	comdegrees.append(i.out_degree()+i.in_degree())
-
+print("Commulated After: " + str(time.time()-t))
 
 incounted = Counter(indegrees)
 counted = Counter(outdegrees)
@@ -74,9 +76,6 @@ comax.set_ylabel("Number of address")
 fig.savefig("powerLaw.svg")
 print("saves")
 
-
-for i in sort:
-	print(str(i))
 
 for i in tmp_graph.ep.weight.sort():
 	print(str(i))
