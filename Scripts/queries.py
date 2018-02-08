@@ -2,22 +2,16 @@ import sys
 sys.path.append("./../Analysis")
 import os
 os.environ['ETH_BLOCKCHAIN_ANALYSIS_DIR'] = './../Analysis/'
-from TxnGraph import TxnGraph
-
 import pymongo
-
 import json
-
 import datetime
 
+
+
+
 if __name__=="__main__":
-    # Take a bunch of snapshots based on the resolution.
-    # Between each snapshot, pass the previous graph object and the previous
-    # end_block number as the start_block in the new snapshot.
-    resolution = 4369999
 
     block_max = 4369999
-
     quadrillion = 1000000000000000000
 
     cmd = "(mongod --dbpath {} > {}/mongo.log 2>&1) &".format(
