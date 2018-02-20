@@ -7,7 +7,7 @@ import json
 import collections
 
 
-with open('losingEther.json') as data_file:
+with open('to_tags.json') as data_file:
     data = json.load(data_file)
 
 x=[]

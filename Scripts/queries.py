@@ -36,41 +36,52 @@ if __name__=="__main__":
         print(commulatedGenesisEther)
 
 
+    print("#################")
+    txs = collection.aggregate([{"$unwind" : '$transactions' }])
+    total=0.0
+    num=0
+    for tx in txs:
+        total+=tx["transactions"]["value"]
+    print("#################")
+    print(str(total))
 
-
-    fourWeeks = 2419200
-    interval = fourWeeks
-
-    startTime = 1435622400
-
-    genesisEtherToCertainTime = {}
-
-    while startTime < 1508112000:
-        print(datetime.datetime.fromtimestamp(startTime).strftime('%Y-%m-%d %H:%M:%S'))
-        txsInInterval = collection.aggregate([{ "$match" : {"$and":[{ "timestamp" : {"$lt":(startTime+interval) }},{"timestamp" : {"$gte":startTime }}] }},{ "$unwind" : '$transactions'}])
-        startTime+=interval
-        for i in txsInInterval:
-            if i["transactions"]["from"] in genesisAddresses:
-                if float(data[i["transactions"]["from"][2:]]["wei"]) >=0:
-                    ether=i["transactions"]["value"]
-                    if float(data[i["transactions"]["from"][2:]]["wei"])<=ether*quadrillion:
-                        data[i["transactions"]["from"][2:]]["wei"]=0
-                        commulatedGenesisEther-=data[i["transactions"]["from"][2:]]["wei"]
-                    else:
-                        data[i["transactions"]["from"][2:]]["wei"]= float(data[i["transactions"]["from"][2:]]["wei"])-ether*quadrillion
-                        commulatedGenesisEther-=ether*quadrillion
-
-            print(commulatedGenesisEther)
-
-        genesisEtherToCertainTime[startTime]=commulatedGenesisEther
-
-        with open('losingEther.txt', 'w') as outfile:
-            json.dump(genesisEtherToCertainTime, outfile)
-
-
-
-
-    print("DONE")
+    print("#################")
+    #
+    #
+    #
+    # fourWeeks = 2419200
+    # interval = fourWeeks
+    #
+    # startTime = 1435622400
+    #
+    # genesisEtherToCertainTime = {}
+    #
+    # while startTime < 1508112000:
+    #     print(datetime.datetime.fromtimestamp(startTime).strftime('%Y-%m-%d %H:%M:%S'))
+    #     txsInInterval = collection.aggregate([{ "$match" : {"$and":[{ "timestamp" : {"$lt":(startTime+interval) }},{"timestamp" : {"$gte":startTime }}] }},{ "$unwind" : '$transactions'}])
+    #     startTime+=interval
+    #     for i in txsInInterval:
+    #         if i["transactions"]["from"] in genesisAddresses:
+    #             if float(data[i["transactions"]["from"][2:]]["wei"]) >=0:
+    #                 ether=i["transactions"]["value"]
+    #                 if float(data[i["transactions"]["from"][2:]]["wei"])<=ether*quadrillion:
+    #                     data[i["transactions"]["from"][2:]]["wei"]=0
+    #                     commulatedGenesisEther-=data[i["transactions"]["from"][2:]]["wei"]
+    #                 else:
+    #                     data[i["transactions"]["from"][2:]]["wei"]= float(data[i["transactions"]["from"][2:]]["wei"])-ether*quadrillion
+    #                     commulatedGenesisEther-=ether*quadrillion
+    #
+    #         print(commulatedGenesisEther)
+    #
+    #     genesisEtherToCertainTime[startTime]=commulatedGenesisEther
+    #
+    #     with open('losingEther.txt', 'w') as outfile:
+    #         json.dump(genesisEtherToCertainTime, outfile)
+    #
+    #
+    #
+    #
+    # print("DONE")
 
 
     # txs = collection.aggregate([{ "$unwind" : '$transactions'}])

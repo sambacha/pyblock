@@ -16,6 +16,13 @@ tmp_graph = load_graph("data/graphs/4369999_None.gt")
 
 print("loaded After: " + str(time.time()-t))
 
+numerOfV=0
+for i in tmp_graph.vertices():
+	numerOfV+=1
+print("number of vertices" +str(numerOfV))
+
+print()
+
 
 indegrees = []
 outdegrees = []
@@ -66,6 +73,9 @@ comax.set_xscale('log')
 comax.set_yscale('log')
 comax.set_xlabel("Number of comulated TX")
 comax.set_ylabel("Number of address")
+
+
+
 
 #fig = plt.figure()
 #ax = fig.add_subplot(2,1,1)

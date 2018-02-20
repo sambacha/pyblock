@@ -87,6 +87,11 @@ class TxnGraph(object):
         self.f_graph = None
         # PropertyMap of edges weighted by eth value of transaction
         self.edgeWeights = None
+
+        #PropertyMap of edges weghted by dollarValue of transaction
+
+        self.edgeDollarValue = None
+
         # PropertyMap of vertices weighted by eth value they hold
         # at the time of the end_block.
         self.vertexWeights = None
@@ -144,7 +149,7 @@ class TxnGraph(object):
             # Try a connection to mongo and force a findOne request.
             # See if it makes it through.
             client = pymongo.MongoClient(serverSelectionTimeoutMS=1000)
-            transactions = client["blockchainExtended"]["blocks"]
+            transactions = client["blockchainExtended2"]["blocks"]
             test = client.find_one({"number": {"$gt": 1}})
             popen = None
         except Exception as err:
@@ -155,7 +160,7 @@ class TxnGraph(object):
 
             popen = subprocess.Popen(cmd, shell=True)
             client = pymongo.MongoClient(serverSelectionTimeoutMS=1000)
-            transactions = client["blockchainExtended"]["blocks"]
+            transactions = client["blockchainExtended2"]["blocks"]
 
         # Update timestamps
         transactions = self._updateTimestamps(transactions)
@@ -204,14 +209,44 @@ class TxnGraph(object):
         for addr in addresses.keys():
             self.nodes[addr] = self.graph.add_vertex()
             self.vertexWeights[self.nodes[addr]] = 1
+            self.addresses[self.nodes[addr]] = addr
+
+
+    def _addDollarPricesToBlocks(self,client):
+
+        blocks = client.find(
+            {"number": {"$gt": 0, "$lt": 4370000}},
+            sort=[("number", pymongo.ASCENDING)]
+        )
+
+        import json
+
+        with open('dollarPrice.json') as data_file:
+            data = json.load(data_file)
+
+        prices = []
+        for i in data:
+            prices.append([i["date"], i["close"]])
+
+        date = 0
+        for block in blocks:
+
+            if int(prices[date][0]) < int(block["timestamp"]):
+                date += 1
+
+            print(block["number"])
+            print(prices[date][1])
+            client.update({"number": block["number"]}, {"$set": {"dollarPrice": prices[date][1]}}, upsert=False)
 
     def _addEdges(self, client):
         blocks = client.find(
-            {"number": {"$gt": 4369900, "$lt": 4370000}},
+            {"number": {"$gt": 0, "$lt": 4370000}},
             sort=[("number", pymongo.ASCENDING)]
         )
+
         for block in blocks:
-            print(block["number"])
+
+
             for txn in block["transactions"]:
                 if txn["to"] != None:
                     toV = self.nodes[txn["to"]]
@@ -222,7 +257,9 @@ class TxnGraph(object):
 
         self._addPropertyMaps()
 
+
         print(graph_tool.centrality.pagerank(self.graph))
+
 
 
 
@@ -317,6 +354,7 @@ class TxnGraph(object):
         self.graph.vertex_properties["weight"] = self.vertexWeights
         self.graph.vertex_properties["address"] = self.addresses
         self.graph.edge_properties["weight"] = self.edgeWeights
+        self.graph.edge_properties["dollarValue"] = self.edgeDollarValue
 
 
     # PUBLIC
@@ -354,6 +392,7 @@ class TxnGraph(object):
         self._addEdges(client)
         print("Added Edges")
 
+        #self._addDollarPricesToBlocks(client)
         #self._addBlocks(client, self.start_block, self.end_block)
         #print("Added Blocks")
         # Kill the mongo client if it was spawned in this process
