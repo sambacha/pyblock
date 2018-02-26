@@ -46,16 +46,22 @@ for data in datasets:
 		for i in ordered.keys():
 			x.append(int(i))
 
-		#parse tagged volumes to y values
 		y=[]
-		for tag in tags:
-			tagValues=[]
-			for timepoint in ordered:
-				tagValues.append(data[timepoint][tag][measure]/max(1,volumes[timepoint])*100)
-			y.append(tagValues)
+		tagValues=[]
+		for timepoint in ordered:
+			value=0
+			for tag in tags:
+				value+=data[timepoint][tag][measure]
+			tagValues.append(value)
+			print(measureNames[measure]+" "+str(timepoint)+":"+str(value))
+		y.append(tagValues)
+
+
 		x=[]
 		for i in ordered.keys():
 			x.append(int(float(i)))
+
+
 
 
 		#Graph generation:
@@ -64,19 +70,19 @@ for data in datasets:
 		convertedValues = mdate.epoch2num(x)
 		#dollar = fig.add_subplot(2,2,2)
 		#number = fig.add_subplot(2,2,3)
-		pal = sns.color_palette("Set2", 10)
+		pal = sns.color_palette()
 		plot.stackplot(convertedValues,y,labels=tags,colors=pal, alpha=0.4 )
 		plot.spines["top"].set_visible(False)  
 		plot.spines["right"].set_visible(False) 
-		plot.legend(loc='upper right')
-		lgd = plot.legend(legend,bbox_to_anchor=(1.3, 0.8),fontsize=12)
 
-		plot.set_ylabel("stake of "+measureNames[measure]+"-volume in percent", fontsize=16)  
+		plot.grid(True)
+
+		label=plot.set_ylabel("total "+measureNames[measure]+"-volume", fontsize=16)  
 
 		plot.xaxis_date()
 
 		fig.autofmt_xdate()
 
 
-		fig.savefig("tagged_timeseries/"+filenames[filenamecounter]+".png",bbox_extra_artists=(lgd,), bbox_inches='tight')
+		fig.savefig("tagged_timeseries/totalVolumes/"+filenames[filenamecounter]+".png",bbox_extra_artists=(label,), bbox_inches='tight')
 		filenamecounter+=1

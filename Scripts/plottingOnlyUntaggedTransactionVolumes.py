@@ -11,7 +11,7 @@ import matplotlib.dates as mdate
 
 
 tags=['1','2','3','4','5','6','7','10']
-legend=['Exchanges','Tokens','Mining Pools','Dapps','Scam','Eth Developer','Genesis','Untagged']
+legend=['Tagged','Untagged']
 
 quadrillion = 1000000000000000000
 datasets=[]
@@ -48,11 +48,15 @@ for data in datasets:
 
 		#parse tagged volumes to y values
 		y=[]
-		for tag in tags:
-			tagValues=[]
-			for timepoint in ordered:
-				tagValues.append(data[timepoint][tag][measure]/max(1,volumes[timepoint])*100)
-			y.append(tagValues)
+		tagValues=[]
+		tagValues2=[]
+		for timepoint in ordered:
+			amount=data[timepoint]["10"][measure]/max(1,volumes[timepoint])*100
+			antiAmount=100-amount
+			tagValues.append(amount)
+			tagValues2.append(antiAmount)
+		y.append(tagValues2)
+		y.append(tagValues)
 		x=[]
 		for i in ordered.keys():
 			x.append(int(float(i)))
@@ -65,7 +69,7 @@ for data in datasets:
 		#dollar = fig.add_subplot(2,2,2)
 		#number = fig.add_subplot(2,2,3)
 		pal = sns.color_palette("Set2", 10)
-		plot.stackplot(convertedValues,y,labels=tags,colors=pal, alpha=0.4 )
+		plot.stackplot(convertedValues,y,labels=legend,colors=pal, alpha=0.4 )
 		plot.spines["top"].set_visible(False)  
 		plot.spines["right"].set_visible(False) 
 		plot.legend(loc='upper right')
@@ -78,5 +82,5 @@ for data in datasets:
 		fig.autofmt_xdate()
 
 
-		fig.savefig("tagged_timeseries/"+filenames[filenamecounter]+".png",bbox_extra_artists=(lgd,), bbox_inches='tight')
+		fig.savefig("tagged_timeseries/OnlyUntagged/"+filenames[filenamecounter]+".png",bbox_extra_artists=(lgd,), bbox_inches='tight')
 		filenamecounter+=1

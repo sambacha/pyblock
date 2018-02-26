@@ -76,6 +76,9 @@ geth --rpc
 mongod
 parseBlockchain
 
+##Addresses:
+ContractMap
+
 ##powerLaw
 currently in: graphAnalysis.py
 
@@ -95,7 +98,17 @@ buildTransactionGraphs.py
 graphAnalysis.py
 generateGraphAnalysisCharts.py
 
-##Tagging Activity
+
+##Tagging transactions
 mongod
 taggedAnalysis.py
 plottingTaggedTransactionVolumes.py
+plottingOnlyTaggedTransactionVolumes.py
+plottingOnlyUntaggedTransactionVolumes.py
+
+
+##Volumes over time 
+mongod
+taggedAnalysis.py
+
+plottingVolumesTotal.py

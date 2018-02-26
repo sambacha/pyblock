@@ -54,5 +54,5 @@ if __name__=="__main__":
 
         genesisEtherToCertainTime[startTime]=commulatedGenesisEther
 
-        with open('losingEther.txt', 'w') as outfile:
+        with open('genesisLoss/losingEther.json', 'w') as outfile:
             json.dump(genesisEtherToCertainTime, outfile)

@@ -7,7 +7,7 @@ import json
 import collections
 
 
-with open('losingEther.json') as data_file:
+with open('genesisLoss/losingEther.json') as data_file:
     data = json.load(data_file)
 
 x=[]
@@ -27,4 +27,4 @@ for i in ordered.keys():
 plt.figure()
 plt.plot(np.array(x),np.array(y))
 plt.axis([min(x), max(x),0,max(y)])
-plt.savefig("genesisEther.svg")
+plt.savefig("genesisLoss/genesisEther.png")

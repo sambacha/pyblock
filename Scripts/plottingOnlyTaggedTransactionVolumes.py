@@ -10,8 +10,8 @@ import datetime
 import matplotlib.dates as mdate
 
 
-tags=['1','2','3','4','5','6','7','10']
-legend=['Exchanges','Tokens','Mining Pools','Dapps','Scam','Eth Developer','Genesis','Untagged']
+tags=['1','2','3','4','5','6','7']
+legend=['Exchanges','Tokens','Mining Pools','Dapps','Scam','Eth Developer','Genesis']
 
 quadrillion = 1000000000000000000
 datasets=[]
@@ -78,5 +78,5 @@ for data in datasets:
 		fig.autofmt_xdate()
 
 
-		fig.savefig("tagged_timeseries/"+filenames[filenamecounter]+".png",bbox_extra_artists=(lgd,), bbox_inches='tight')
+		fig.savefig("tagged_timeseries/OnlyTagged/"+filenames[filenamecounter]+".png",bbox_extra_artists=(lgd,), bbox_inches='tight')
 		filenamecounter+=1

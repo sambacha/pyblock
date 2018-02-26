@@ -90,9 +90,9 @@ def iterateOverTransactionsForTagging():
             taggedFromEtherToCertainTime[startTime]=fromValues
             taggedToEtherToCertainTime[startTime]=toValues
 
-        with open('from_tags.json', 'w') as outfile:
+        with open('tagged_timeseries/from_tags.json', 'w') as outfile:
             json.dump(taggedFromEtherToCertainTime, outfile)
-        with open('to_tags.json', 'w') as outfile:
+        with open('tagged_timeseries/to_tags.json', 'w') as outfile:
             json.dump(taggedToEtherToCertainTime, outfile)
 
 iterateOverTransactionsForTagging()
