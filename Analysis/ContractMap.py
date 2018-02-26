@@ -146,6 +146,14 @@ class ContractMap(object):
                 print("Done with block {}...".format(self.last_block))
                 self.save()
 
+            with open('./Scripts/data/genesis_block.json') as data_file:
+                data = json.load(data_file)
+
+            for addr in data:
+                self.addresses["0x" + addr] = 6
+
+
+
     def save(self):
         """Pickle the object and save it to a file."""
         state = (self.last_block, self.addresses)

@@ -2,12 +2,54 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45b2ae26-3ba5-4197-ac7c-30f72f01cc29" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Forecasting/R/arima.R" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Forecasting/R/vol.R" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Forecasting/model.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Forecasting/pipeline.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Forecasting/r_io_util.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Forecasting/sim.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/HIST.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/addGenesisCodes.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/dapp_addresses.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/dollarPrice.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/draw_graphs.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/extract.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/from_tags (2).json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/from_tags_final.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/from_tags_final.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/genesis_block.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/jsonImport.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/losing.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/losingEther.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/losingEther.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/miningPooles.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/parse_scam_addresses.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/powerLaw.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/preprocess.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/queries.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/readGraph.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/scam_addresses.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/stacked.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/stackedTag.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/tag_addresses.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/tagged_plot.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/tagged_to_plot_stacked.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/to_tags (2).json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/to_tags_final.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/token_addresses.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/top_token_parse.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Scripts/vertex-percolation.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dollarPrice.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/stream.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/forecast.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/verify_blocks.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Analysis/ContractMap.py" afterPath="$PROJECT_DIR$/Analysis/ContractMap.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Analysis/TxnGraph.py" afterPath="$PROJECT_DIR$/Analysis/TxnGraph.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/losingEther.py" afterPath="$PROJECT_DIR$/Scripts/losingEther.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/powerLaw.svg" afterPath="$PROJECT_DIR$/Scripts/powerLaw.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/queries.py" afterPath="$PROJECT_DIR$/Scripts/queries.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/readGraph.py" afterPath="$PROJECT_DIR$/Scripts/readGraph.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Preprocessing/Crawler/crawler_util.py" afterPath="$PROJECT_DIR$/Preprocessing/Crawler/crawler_util.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/from_tags.json" afterPath="$PROJECT_DIR$/Scripts/from_tags.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scripts/to_tags.json" afterPath="$PROJECT_DIR$/Scripts/to_tags.json" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,10 +70,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>4370</find>
-      <find>rpcreq</find>
-      <find>load</find>
-      <find>437</find>
       <find>tmp_graph</find>
       <find>addver</find>
       <find>propert</find>
@@ -58,6 +96,10 @@
       <find>power</find>
       <find>mk</find>
       <find>contract</find>
+      <find>&quot;.addres</find>
+      <find>new_edge</find>
+      <find>self.address</find>
+      <find>f_graph</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -67,15 +109,15 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="C:/Python3/Lib/site-packages/pymongo/collection.py" />
-        <option value="$PROJECT_DIR$/Analysis/ContractMap.py" />
         <option value="$PROJECT_DIR$/Scripts/data/draw_graphs.py" />
         <option value="$PROJECT_DIR$/Scripts/draw_graphs.py" />
         <option value="$PROJECT_DIR$/Scripts/preprocess.py" />
         <option value="$PROJECT_DIR$/Preprocessing/Crawler/crawler_util.py" />
         <option value="$PROJECT_DIR$/Preprocessing/Crawler/Crawler.py" />
         <option value="$PROJECT_DIR$/Analysis/tags.py" />
-        <option value="$PROJECT_DIR$/Analysis/TxnGraph.py" />
         <option value="$PROJECT_DIR$/Scripts/queries.py" />
+        <option value="$PROJECT_DIR$/Analysis/ContractMap.py" />
+        <option value="$PROJECT_DIR$/Analysis/TxnGraph.py" />
       </list>
     </option>
   </component>
@@ -85,14 +127,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/node_modules" />
-  </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="309" />
-    <option name="y" value="-1094" />
-    <option name="width" value="1534" />
-    <option name="height" value="790" />
+    <option name="x" value="400" />
+    <option name="y" value="-1102" />
+    <option name="width" value="1227" />
+    <option name="height" value="632" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -129,7 +168,6 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -162,6 +200,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -201,7 +240,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-1089" width="1938" height="1058" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50104386" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50104165" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -283,7 +322,7 @@
         <state relative-caret-position="924">
           <caret line="47" column="11" lean-forward="false" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="11" />
           <folding>
-            <element signature="e#58#72#0" expanded="true" />
+            <element signature="e#58#72#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -383,7 +422,7 @@
         <state relative-caret-position="924">
           <caret line="47" column="11" lean-forward="false" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="11" />
           <folding>
-            <element signature="e#58#72#0" expanded="true" />
+            <element signature="e#58#72#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -525,13 +564,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis/ContractMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-755">
-          <caret line="106" column="41" lean-forward="false" selection-start-line="106" selection-start-column="41" selection-end-line="106" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python3/Lib/subprocess.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2040">
@@ -568,7 +600,7 @@
         <state relative-caret-position="252">
           <caret line="15" column="15" lean-forward="false" selection-start-line="15" selection-start-column="15" selection-end-line="15" selection-end-column="15" />
           <folding>
-            <element signature="e#58#72#0" expanded="true" />
+            <element signature="e#58#72#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -597,10 +629,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Analysis/ContractMap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4455">
+          <caret line="152" column="47" lean-forward="false" selection-start-line="152" selection-start-column="47" selection-end-line="152" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Analysis/TxnGraph.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="285" column="50" lean-forward="false" selection-start-line="285" selection-start-column="50" selection-end-line="285" selection-end-column="50" />
+        <state relative-caret-position="168">
+          <caret line="179" column="49" lean-forward="false" selection-start-line="179" selection-start-column="49" selection-end-line="179" selection-end-column="49" />
           <folding>
             <element signature="e#50#84#0" expanded="true" />
           </folding>

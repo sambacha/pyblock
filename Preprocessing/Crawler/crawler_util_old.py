@@ -3,13 +3,9 @@ import pymongo
 from collections import deque
 import os
 import pdb
-import pprint
-from ethereum.utils import encode_hex
-from ethereum.utils import mk_contract_address
 
-DB_NAME = "eth0008"
-COLLECTION = "transactions"
-contractAddresses = []
+DB_NAME = "blockchainExtended2"
+COLLECTION = "blocks"
 
 # mongodb
 # -------
@@ -33,7 +29,7 @@ def initMongo(client):
     try:
         # Index the block number so duplicate records cannot be made
         db[COLLECTION].create_index(
-			[("blockNumber", pymongo.DESCENDING)("txNumber", pymongo.DESCENDING)],
+			[("number", pymongo.DESCENDING)],
 			unique=True
 		)
     except:
@@ -56,7 +52,15 @@ def insertMongo(client, d):
     error <None or str>
     """
     try:
-        client.insert_many(d)
+        client.insert_one(d)
+        return None
+    except Exception as err:
+        pass
+
+
+def insertMiner(client, n,miner):
+    try:
+        client.update_one({"number":n},{"$set":{"miner":miner}})
         return None
     except Exception as err:
         pass
@@ -74,12 +78,12 @@ def highestBlock(client):
     --------
     <int>
     """
-    n = client.find_one(sort=[("blockNumber", pymongo.DESCENDING)])
+    n = client.find_one(sort=[("number", pymongo.DESCENDING)])
     if not n:
         # If the database is empty, the highest block # is 0
-        return -1
-    assert "blockNumber" in n, "Highest block is incorrectly formatted"
-    return n["blockNumber"]
+        return 0
+    assert "number" in n, "Highest block is incorrectly formatted"
+    return n["number"]
 
 
 def makeBlockQueue(client):
@@ -95,10 +99,10 @@ def makeBlockQueue(client):
     <deque>
     """
     queue = deque()
-    all_n = client.find({}, {"blockNumber":1, "_id":0},
-    		sort=[("blockNumber", pymongo.ASCENDING)])
+    all_n = client.find({}, {"number":1, "_id":0},
+    		sort=[("number", pymongo.ASCENDING)])
     for i in all_n:
-        queue.append(i["blockNumber"])
+        queue.append(i["number"])
     return queue
 
 # Geth
@@ -149,73 +153,38 @@ def decodeBlock(block):
   	}
     """
     try:
-        txs = []
         b = block
         if "result" in block:
             b = block["result"]
         # Filter the block
+
+
         new_block = {
             "number": int(b["number"], 16),
-            "timestamp": int(b["timestamp"], 16),		# Timestamp is in unix time
-            "transactions": []
+            "miner": b["miner"],
+            "timestamp": int(b["timestamp"], 16),
+            "difficulty": int(b["difficulty"], 16),
+            "gasLimit": int(b["gasLimit"], 16),
+            "gasUsed": int(b["gasUsed"], 16),
+            "size": int(b["size"], 16),
+            "totalDifficulty": b["totalDifficulty"],
+            "transactions": [],
         }
         # Filter and decode each transaction and add it back
         # 	Value, gas, and gasPrice are all converted to ether
-        reward = float(5.)    
-        i = 1
-        to = "to"
-        isContractCreation = False
-        fromContract = False
-        toContract = False
         for t in b["transactions"]:
-            if t["to"] == None:
-                to = "0x"+encode_hex(mk_contract_address(t["from"],int(t["nonce"], 16)))
-                isContractCreation = True
-                contractAddresses.append(to)
-            elif t["to"] in contractAddresses:
-                toContract = True
-            else:
-                to = t["to"]
-            if t["from"] in contractAddresses:
-                fromContract = True
-            tx = makeTx(b["number"],i,b["timestamp"],t["from"],to,float(int(t["value"], 16))/1000000000000000000.,isContractCreation,t["input"],t["gas"],t["gasPrice"],fromContract,toContract)
-            reward += float(int(t["gas"],16)*int(t["gasPrice"],16))/1000000000000000000.
-            txs.append(tx)
-            i += 1
-        rewardTx = makeTx(b["number"],0,b["timestamp"],"REWARD",b["miner"],reward,isContractCreation,"","0x0","0x0",False,False)
-        txs.append(rewardTx)
-        return txs
+            new_t = {
+                "from": t["from"],
+                "to": t["to"],
+                "value": float(int(t["value"], 16))/1000000000000000000.,
+                "input": t["input"],
+                "gas": t["gas"],
+                "gasPrice": t["gasPrice"],
+                "nonce":t["nonce"]
+            }
+            new_block["transactions"].append(new_t)
+        return new_block
 
-    except:
-        return None
-
-def makeTx(blockNumber,txNumber,timestamp,sender,to,value,isContractCreation,data,gas,gasPrice,fromContract,toContract):
-    tx = {
-        "blockNumber": int(blockNumber, 16),
-        "txNumber": txNumber,
-        "timestamp": int(timestamp, 16),
-        "from": sender,
-        "to": to,
-        "value": value,
-        "isContractCreation": isContractCreation,
-        "inputData": data,
-        "gas": int(gas, 16),
-        "gasPrice": int(gasPrice, 16),
-        "fromContract": fromContract,
-        "toContract": toContract
-    }
-    return tx
-
-
-def decode_genesis_block(block):
-    try:
-        txs = []
-        i = 0
-        for x in block.keys():
-            tx = makeTx("0x0",0,"0x0","Genesis",x,float(block[x]["wei"])/1000000000000000000.,False,"","0x0","0x0",False,False)
-            txs.append(tx)
-            i += 1
-        return txs
     except:
         return None
 

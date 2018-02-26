@@ -88,6 +88,7 @@ class TxnGraph(object):
         # PropertyMap of edges weighted by eth value of transaction
         self.edgeWeights = None
         # PropertyMap of vertices weighted by eth value they hold
+        self.edgedollars = None
         # at the time of the end_block.
         self.vertexWeights = None
         # All addresses (each node has an address)
@@ -144,7 +145,7 @@ class TxnGraph(object):
             # Try a connection to mongo and force a findOne request.
             # See if it makes it through.
             client = pymongo.MongoClient(serverSelectionTimeoutMS=1000)
-            transactions = client["blockchainExtended"]["blocks"]
+            transactions = client["blockchainExtended2"]["blocks"]
             test = client.find_one({"number": {"$gt": 1}})
             popen = None
         except Exception as err:
@@ -155,7 +156,7 @@ class TxnGraph(object):
 
             popen = subprocess.Popen(cmd, shell=True)
             client = pymongo.MongoClient(serverSelectionTimeoutMS=1000)
-            transactions = client["blockchainExtended"]["blocks"]
+            transactions = client["blockchainExtended2"]["blocks"]
 
         # Update timestamps
         transactions = self._updateTimestamps(transactions)
@@ -177,9 +178,19 @@ class TxnGraph(object):
         flown through it). Create a new one if needed.
         """
         if self.edgeWeights[newEdge] is not None:
-            self.edgeWeights[newEdge] += value
+            self.edgeWeights[newEdge] += max(0.000000000000000001,value)
         else:
-            self.edgeWeights[newEdge] = 0
+            self.edgeWeights[newEdge] = max(0.000000000000000001,value)
+
+    def _addEdgeDollar(self, newEdge, value):
+        """
+        Add to the weight of a given edge (i.e. the amount of ether that has
+        flown through it). Create a new one if needed.
+        """
+        if self.edgedollars[newEdge] is not None:
+            self.edgedollars[newEdge] += max(0.000000000000000001,value)
+        else:
+            self.edgedollars[newEdge] = max(0.000000000000000001,value)
 
     def _addVertexWeight(self, from_v, to_v, value):
         """
@@ -200,18 +211,21 @@ class TxnGraph(object):
 
     def _addVertieces(self):
 
-        addresses = pickle.load(open(".addresses.p", "rb"))
+        addresses = pickle.load(open("data/.addresses.p", "rb"))
         for addr in addresses.keys():
             self.nodes[addr] = self.graph.add_vertex()
             self.vertexWeights[self.nodes[addr]] = 1
+            self.addresses[self.nodes[addr]] = addr
+
 
     def _addEdges(self, client):
         blocks = client.find(
-            {"number": {"$gt": 4369900, "$lt": 4370000}},
+            {"number": {"$gt": 4369000, "$lt": 4370000}},
             sort=[("number", pymongo.ASCENDING)]
         )
         for block in blocks:
-            print(block["number"])
+            if block["number"]%1000 ==0:
+                print(block["number"])
             for txn in block["transactions"]:
                 if txn["to"] != None:
                     toV = self.nodes[txn["to"]]
@@ -219,10 +233,9 @@ class TxnGraph(object):
                     newEdge = self.graph.add_edge(fromV,toV)
                     self.edges.append(newEdge)
                     self._addEdgeWeight(newEdge,txn["value"])
+                    self._addEdgeDollar(newEdge,txn["value"]*block["dollarPrice"])
 
-        self._addPropertyMaps()
 
-        print(graph_tool.centrality.pagerank(self.graph))
 
 
 
@@ -317,6 +330,7 @@ class TxnGraph(object):
         self.graph.vertex_properties["weight"] = self.vertexWeights
         self.graph.vertex_properties["address"] = self.addresses
         self.graph.edge_properties["weight"] = self.edgeWeights
+        self.graph.edge_properties["dollar"] = self.edgedollars
 
 
     # PUBLIC
@@ -347,12 +361,15 @@ class TxnGraph(object):
         self.edgeWeights = self.graph.new_edge_property("double")
         self.vertexWeights = self.graph.new_vertex_property("double")
         self.addresses = self.graph.new_vertex_property("string")
+        self.edgedollars = self.graph.new_edge_property("double")
 
         # Add blocks to the graph
         self._addVertieces()
         print("Added Vertieces")
         self._addEdges(client)
         print("Added Edges")
+
+        self._addPropertyMaps()
 
         #self._addBlocks(client, self.start_block, self.end_block)
         #print("Added Blocks")
@@ -377,6 +394,7 @@ class TxnGraph(object):
             "nodes": self.nodes,
             "edges": self.edges,
             "edgeWeights": self.edgeWeights,
+            "edgeDollars": self.edgedollars,
             "vertexWeights": self.vertexWeights,
             "addresses": self.addresses,
             "graph": self.graph
@@ -403,6 +421,7 @@ class TxnGraph(object):
         self.nodes = tmp["nodes"]
         self.edges = tmp["edges"]
         self.edgeWeights = tmp["edgeWeights"]
+        self.edgedollars = tmp["edgeDollars"]
         self.vertexWeights = tmp["vertexWeights"]
         self.addresses = tmp["addresses"]
         self.graph = tmp["graph"]

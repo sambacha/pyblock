@@ -1,0 +1,22 @@
+"""Pull data from geth and parse it into mongo."""
+
+import subprocess
+import sys
+sys.path.append("./../Preprocessing")
+sys.path.append("./../Preprocessing/Crawler")
+sys.path.append("./../Analysis")
+import os
+os.environ['ETH_BLOCKCHAIN_ANALYSIS_DIR'] = './../Preprocessing/'
+from Crawler import Crawler
+from ContractMap import ContractMap
+import subprocess
+import time
+LOGDIR = "./../Preprocessing/logs"
+
+
+print("Booting processes.")
+# Catch up with the crawler
+c = Crawler.Crawler()
+
+
+print("Update complete.")
