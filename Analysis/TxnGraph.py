@@ -220,7 +220,7 @@ class TxnGraph(object):
 
     def _addEdges(self, client):
         blocks = client.find(
-            {"number": {"$gt": 4369000, "$lt": 4370000}},
+            {"number": {"$gt": 0, "$lt": 4370000}},
             sort=[("number", pymongo.ASCENDING)]
         )
         for block in blocks:

@@ -50,11 +50,18 @@ for data in datasets:
 		y=[]
 		tagValues=[]
 		tagValues2=[]
+
+		total=0
+		antitotal=0
 		for timepoint in ordered:
+			total+=data[timepoint]["10"][measure]
+
 			amount=data[timepoint]["10"][measure]/max(1,volumes[timepoint])*100
 			antiAmount=100-amount
+			antitotal+=volumes[timepoint]-data[timepoint]["10"][measure]
 			tagValues.append(amount)
 			tagValues2.append(antiAmount)
+		print(total/(antitotal+total))
 		y.append(tagValues2)
 		y.append(tagValues)
 		x=[]
@@ -73,7 +80,7 @@ for data in datasets:
 		plot.spines["top"].set_visible(False)  
 		plot.spines["right"].set_visible(False) 
 		plot.legend(loc='upper right')
-		lgd = plot.legend(legend,bbox_to_anchor=(1.3, 0.8),fontsize=12)
+		lgd = plot.legend(legend,bbox_to_anchor=(0.7, 0.8),fontsize=12)
 
 		plot.set_ylabel("stake of "+measureNames[measure]+"-volume in percent", fontsize=16)  
 

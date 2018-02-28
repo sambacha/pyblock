@@ -48,12 +48,17 @@ for data in datasets:
 
 		#parse tagged volumes to y values
 		y=[]
+		totals=[]
 		for tag in tags:
+			total=0
 			tagValues=[]
 			for timepoint in ordered:
-				tagValues.append(data[timepoint][tag][measure]/max(1,volumes[timepoint])*100)
+				tagValues.append(data[timepoint][tag][measure]/max(1,volumes[timepoint])*99)
+				total+=data[timepoint][tag][measure]
 			y.append(tagValues)
+			totals.append(total)
 		x=[]
+		print("fromTo "+measureNames[measure]+":"+str(totals))
 		for i in ordered.keys():
 			x.append(int(float(i)))
 
@@ -69,7 +74,7 @@ for data in datasets:
 		plot.spines["top"].set_visible(False)  
 		plot.spines["right"].set_visible(False) 
 		plot.legend(loc='upper right')
-		lgd = plot.legend(legend,bbox_to_anchor=(1.3, 0.8),fontsize=12)
+		lgd = plot.legend(legend,bbox_to_anchor=(1.22, 0.8),fontsize=12)
 
 		plot.set_ylabel("stake of "+measureNames[measure]+"-volume in percent", fontsize=16)  
 

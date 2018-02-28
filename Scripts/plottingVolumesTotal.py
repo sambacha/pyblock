@@ -53,7 +53,6 @@ for data in datasets:
 			for tag in tags:
 				value+=data[timepoint][tag][measure]
 			tagValues.append(value)
-			print(measureNames[measure]+" "+str(timepoint)+":"+str(value))
 		y.append(tagValues)
 
 

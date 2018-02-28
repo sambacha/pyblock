@@ -33,173 +33,164 @@ def load_tagged_addresses():
 
 tags=load_tagged_addresses()
 
-# numerOfV=0
-# for i in tmp_graph.vertices():
-# 	numerOfV+=1
-# print("number of vertices" +str(numerOfV))
 
 
+measurements=[None,tmp_graph.ep.weight,tmp_graph.ep.dollar]
+measurementNames=["number","ether","dollar"]
 
-# indegrees = []
-# outdegrees = []
-# comdegrees = []
+for measure in [0,1,2]:
+	print("Starting with measurement: "+measurementNames[measure])
+	# inDegrees=tmp_graph.get_in_degrees(range(tmp_graph.get_vertices().size),eweight=measurements[measure])
+	# tmp_graph.vp.ins=inDegrees
+	# print("calculated inDegrees")
+	# outDegrees=tmp_graph.get_out_degrees(range(tmp_graph.get_vertices().size),eweight=measurements[measure])
+	# tmp_graph.vp.outs=outDegrees
+	# print("calculated outDegrees")
+	pagerank=graph_tool.centrality.pagerank(tmp_graph,weight =measurements[measure])
+	tmp_graph.vp.pr=pagerank
+	print("calculated pageranks")
+	eig,auth,hub=graph_tool.centrality.hits(tmp_graph,weight =measurements[measure])
+	tmp_graph.vp.auth=auth
+	tmp_graph.vp.hub=hub
+	print("calculated HITS")
 
+	mappings=[]
+	counter=0
+	#creating address association
+	for v in tmp_graph.vertices():
+		mapping=[int(v),v.in_degree(weight =measurements[measure]),v.out_degree(weight =measurements[measure]),tmp_graph.vp.pr[v],tmp_graph.vp.auth[v],tmp_graph.vp.hub[v]]
+		mappings.append(mapping)
+		counter+=1
+		if counter%100000 == 0:
+			print(counter)
 
-# for i in tmp_graph.vertices():
-# 	indegrees.append(i.in_degree())
-# print("In After: " + str(time.time()-t))
+	numpiedMappings=np.array(mappings).astype(float)
+	print("Created Numpy Array: " + str(time.time()-t))
 
-# for i in tmp_graph.vertices():
-# 	outdegrees.append(i.out_degree())
-# print("Out After: " + str(time.time()-t))
+	#sort by columns
+	inSorted=numpiedMappings[numpiedMappings[:,1].argsort()]
+	outSorted=numpiedMappings[numpiedMappings[:,2].argsort()]
+	prSorted=numpiedMappings[numpiedMappings[:,3].argsort()]
+	authSorted=numpiedMappings[numpiedMappings[:,4].argsort()]
+	hubSorted=numpiedMappings[numpiedMappings[:,5].argsort()]
 
-# for i in tmp_graph.vertices():
-# 	comdegrees.append(i.out_degree()+i.in_degree())
-# print("Commulated After: " + str(time.time()-t))
+	print("Sorted Numpy Arrays: " + str(time.time()-t))
 
-# incounted = Counter(indegrees)
-# counted = Counter(outdegrees)
-# comcounted = Counter(comdegrees)
-
-# insort = sorted(incounted.items(), reverse=True)
-# sort = sorted(counted.items(), reverse=True)
-# comsort = sorted(comcounted.items(), reverse=True)
-
-
-# fig = plt.figure()
-# inax = fig.add_subplot(2,2,1)
-# ax = fig.add_subplot(2,2,2)
-# comax = fig.add_subplot(2,2,3)
-
-# inline, = inax.plot(*zip(*insort),"*")
-# line, = ax.plot(*zip(*sort),"*")
-# comlin, = comax.plot(*zip(*comsort),"*")
-
-# inax.set_xscale('log')
-# inax.set_yscale('log')
-# inax.set_xlabel("Number of Ingoing TX")
-# inax.set_ylabel("Number of address")
-
-# ax.set_xscale('log')
-# ax.set_yscale('log')
-# ax.set_xlabel("Number of outgoing TX")
-# ax.set_ylabel("Number of address")
-
-# comax.set_xscale('log')
-# comax.set_yscale('log')
-# comax.set_xlabel("Number of comulated TX")
-# comax.set_ylabel("Number of address")
+	print(str(inSorted[-1]))
+	print(str(outSorted[-1]))
+	print(str(prSorted[-1]))
+	print(str(authSorted[-1]))
+	print(str(hubSorted[-1]))
 
 
+	allsorted=[inSorted,outSorted,prSorted,authSorted,hubSorted]
 
+	allTaggedRanks=[]
 
-# fig.savefig("powerLaw.png")
-# print("saves")
+	for oneSorted in allsorted:
+		rank=10000
+		TaggedRanks=[]
+		for topranked in oneSorted[-10000:]:
+			addr=tmp_graph.vp.address[int(topranked[0])]
+			if addr in tags:
+				taggedRank=[addr,str(tags[addr]),str(rank)]
+				TaggedRanks.append(taggedRank)
+				print('TAGGED')
+			rank-=1
+		allTaggedRanks.append(TaggedRanks)
 
-
-
-
-#fig = plt.figure()
-#ax = fig.add_subplot(2,1,1)
-
-#line, = ax.scatter(*zip(*sort))
-#ax.set_yscale('log')
-#plt.hist(vert,bins=range(max(vert)+2))
-
-
-
-#for i in tmp_graph.ep.weight.sort():
-#	print(str(i))
-#asd=0
-#for e in tmp_graph.edges():
-#	print(tmp_graph.ep.weight[e])
-#	asd+=1
-#	if asd%10000==0:
-#		print(asd)
-
-
-#print(numberOfEdges)
-#for e in tmp_graph.edges():
-#	print("weight: "+str(tmp_graph.ep.weight[e]))
-
-#for v in tmp_graph.vertices():
-#	print("address: "+tmp_graph.vp.address[v])
-
-
-#for e in tmp_graph.edges():
-#	tmp_graph.ep.dollar[e]+=0.000001
-
-print("StartPagerank:")
-#propertyMap=graph_tool.centrality.pagerank(tmp_graph,weight =tmp_graph.ep.dollar)
-propertyMap=graph_tool.centrality.pagerank(tmp_graph,weight =tmp_graph.ep.weight)
-print("calculated pagerank After: " + str(time.time()-t))
-
-
-tmp_graph.vp.pr=propertyMap
-
-
-
-pageranking=[]#np.array([[0.000000000000001,"0xa1"]])
-counter=0
-
-#creating address pagerank association
-for v in tmp_graph.vertices():
-	newEntry=[tmp_graph.vp.pr[v],tmp_graph.vp.address[v]]
-	pageranking.append(newEntry)
-	counter+=1
-	if counter%10000 == 0:
-		print(counter)
-
-
-#convert from array to ndarray
-print("Create Numpy Array: " + str(time.time()-t))
-numpied=np.array(pageranking)
-print("Created Numpy Array: " + str(time.time()-t))
-
-#sort by first column
-print("Sort Numpy Array: " + str(time.time()-t))
-numpied2=numpied[numpied[:,0].argsort()]
-print("Sorted Numpy Array: " + str(time.time()-t))
-
-#give top 10 rated addresses
-numberOfTags={'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'10':0}
-
-for i in numpied2.tolist()[:10000]:
-	if i[1] in tags:
-		numberOfTags[str(tags[i[1]])]+=1
-		print("LOL")
-	else:
-		numberOfTags['10']+=1
-
-
-with open('pagerankResults.json', 'w') as outfile:
-    json.dump(numberOfTags, outfile)
-
-
-
-#for v in tmp_graph.vertices():
-#	print("address: "+tmp_graph.vp.address[v])
-
-#for i in propertyMap:
-	#print(i)
+	with open(measurementNames[measure]+'taggedRankings.json', 'w') as outfile:
+		json.dump(allTaggedRanks, outfile)
 
 
 
 
 
 
-# print("local_clustering:")
-# graph_tool.clustering.local_clustering(tmp_graph)
-# print("calculated local clustering After: " + str(time.time()-t))
 
-# print("local_global_clustering:")
-# graph_tool.clustering.global_clustering(tmp_graph)
-# print("calculated global Clustering After: " + str(time.time()-t))
 
-# print("extended_clustering:")
-# graph_tool.clustering.extended_clustering(tmp_graph)
-# print("calculated extended_clustering After: " + str(time.time()-t))
 
+# print("StartPagerank:")
+# pagerankNumber=graph_tool.centrality.pagerank(tmp_graph)
+# pagerankEther=graph_tool.centrality.pagerank(tmp_graph,weight =tmp_graph.ep.weight)
+# pagerankDollar=graph_tool.centrality.pagerank(tmp_graph,weight =tmp_graph.ep.dollar)
+# print("calculated pagerank After: " + str(time.time()-t))
+
+
+# tmp_graph.vp.prNumber=pagerankNumber
+# tmp_graph.vp.prEther=pagerankEther
+# tmp_graph.vp.prDollar=pagerankDollar
+
+
+
+# pagerankingNumber=[]
+# pagerankingEther=[]
+# pagerankingDollar=[]
+# counter=0
+
+# #creating address pagerank association
+# for v in tmp_graph.vertices():
+# 	number=[tmp_graph.vp.prNumber[v],tmp_graph.vp.address[v]]
+# 	ether=[tmp_graph.vp.prEther[v],tmp_graph.vp.address[v]]
+# 	dollar=[tmp_graph.vp.prDollar[v],tmp_graph.vp.address[v]]
+# 	pagerankingNumber.append(number)
+# 	pagerankingEther.append(ether)
+# 	pagerankingDollar.append(dollar)
+# 	counter+=1
+# 	if counter%100000 == 0:
+# 		print(counter)
+
+
+# #convert from array to ndarray
+# print("Create Numpy Arrays: " + str(time.time()-t))
+# numpiedNumber=np.array(pagerankingNumber)
+# numpiedEther=np.array(pagerankingEther)
+# numpiedDollar=np.array(pagerankingDollar)
+# print("Created Numpy Arrays: " + str(time.time()-t))
+
+# #sort by first column
+# print("Sort Numpy Arrays: " + str(time.time()-t))
+# numpiedNumberSorted=numpiedNumber[numpiedNumber[:,0].argsort()]
+# numpiedEtherSorted=numpiedEther[numpiedEther[:,0].argsort()]
+# numpiedDollarSorted=numpiedDollar[numpiedDollar[:,0].argsort()]
+# print("Sorted Numpy Arrays: " + str(time.time()-t))
+
+# #give top 10 rated addresses
+
+# place=1
+# rankingsNumber={}
+
+# for i in numpiedNumberSorted.tolist()[:10000]:
+# 	if i[1] in tags:
+# 		rankingsNumber[str(i[1])]=[str(tags[i[1]]),str(place)]
+# 	place+=1
+
+# with open('pagerankNumber.json', 'w') as outfile:
+#     json.dump(rankingsNumber, outfile)
+
+
+
+# place=1
+# rankingsEther={}
+
+# for i in numpiedEtherSorted.tolist()[:10000]:
+# 	if i[1] in tags:
+# 		rankingsEther[str(i[1])]=[str(tags[i[1]]),str(place)]
+# 	place+=1
+
+# with open('pagerankEther.json', 'w') as outfile:
+#     json.dump(rankingsEther, outfile)
+
+
+# place=1
+# rankingsDollar={}
+
+# for i in numpiedDollarSorted.tolist()[:10000]:
+# 	if i[1] in tags:
+# 		rankingsDollar[str(i[1])]=[str(tags[i[1]]),str(place)]
+# 	place+=1
+# with open('pagerankDollar.json', 'w') as outfile:
+#     json.dump(rankingsDollar, outfile)
 
 
 
@@ -208,28 +199,3 @@ with open('pagerankResults.json', 'w') as outfile:
 # graph_tool.centrality.hits(tmp_graph)
 # print("calculated hits After: " + str(time.time()-t))
 
-# print("StartEigenvector:")
-# graph_tool.centrality.eigenvector(tmp_graph)
-# print("calculated eigenvector After: " + str(time.time()-t))
-
-
-
-
-# print("motifs:")
-# motifs, counts = graph_tool.clustering.motifs(tmp_graph,k=2,motif_list=([g1]))
-# print("calculated motifs After: " + str(time.time()-t))
-
-#print("StartCloseness:")
-#graph_tool.centrality.closeness(tmp_graph)
-#print("calculated closeness After: " + str(time.time()-t))
-
-#print("betweenness")
-#graph_tool.centrality.betweenness(tmp_graph)
-#print("calculated betweenness After: " + str(time.time()-t))
-
-#print("StartKatz:")
-#graph_tool.centrality.katz(tmp_graph)
-#print("calculated katz After: " +str(time.time()-t))
-#for address in addresses:
-#	print(counter)
-#	counter+=1
