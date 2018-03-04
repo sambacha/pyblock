@@ -21,17 +21,30 @@ tmp_graph = load_graph("data/graphs/smallerGraph.gt")
 
 print("loaded After: " + str(time.time()-t))
 
-print("betweenness")
-graph_tool.centrality.betweenness(tmp_graph)
-print("calculated betweenness After: " + str(time.time()-t))
 
-print("local_clustering:")
-graph_tool.clustering.local_clustering(tmp_graph)
-print("calculated local clustering After: " + str(time.time()-t))
-
-print("motifs:")
-motifs, counts = graph_tool.clustering.motifs(tmp_graph,k=3)
+print("motifs2:")
+motifs, counts = graph_tool.clustering.motifs(tmp_graph,k=2)
+print(motifs,counts)
 print("calculated motifs After: " + str(time.time()-t))
 
+counter=0
+for i in range(20):
 
-print("In After: " + str(time.time()-t))
+	graph_draw(motifs[i],output='motifs/2/'+str(counts[i])+'Y'+str(counter)+'.png')
+	counter+=1
+
+print(sum(counts))
+
+
+print("motifs3:")
+motifs, counts = graph_tool.clustering.motifs(tmp_graph,k=3)
+print(motifs,counts)
+print("calculated motifs After: " + str(time.time()-t))
+
+counter=0
+for i in range(150):
+
+	graph_draw(motifs[i],output='motifs/3/'+str(counts[i])+'X'+str(counter)+'.png')
+	counter+=1
+
+print(sum(counts))

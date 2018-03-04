@@ -7,8 +7,8 @@ import pprint
 from ethereum.utils import encode_hex
 from ethereum.utils import mk_contract_address
 
-DB_NAME = "eth0008"
-COLLECTION = "transactions"
+DB_NAME = "blockchainExtended2"
+COLLECTION = "blocks"
 contractAddresses = []
 
 # mongodb
@@ -33,7 +33,7 @@ def initMongo(client):
     try:
         # Index the block number so duplicate records cannot be made
         db[COLLECTION].create_index(
-			[("blockNumber", pymongo.DESCENDING)("txNumber", pymongo.DESCENDING)],
+			[("number", pymongo.DESCENDING)("number", pymongo.DESCENDING)],
 			unique=True
 		)
     except:
@@ -74,12 +74,12 @@ def highestBlock(client):
     --------
     <int>
     """
-    n = client.find_one(sort=[("blockNumber", pymongo.DESCENDING)])
+    n = client.find_one(sort=[("number", pymongo.DESCENDING)])
     if not n:
         # If the database is empty, the highest block # is 0
         return -1
-    assert "blockNumber" in n, "Highest block is incorrectly formatted"
-    return n["blockNumber"]
+    assert "number" in n, "Highest block is incorrectly formatted"
+    return n["number"]
 
 
 def makeBlockQueue(client):
@@ -95,10 +95,10 @@ def makeBlockQueue(client):
     <deque>
     """
     queue = deque()
-    all_n = client.find({}, {"blockNumber":1, "_id":0},
-    		sort=[("blockNumber", pymongo.ASCENDING)])
+    all_n = client.find({}, {"number":1, "_id":0},
+    		sort=[("number", pymongo.ASCENDING)])
     for i in all_n:
-        queue.append(i["blockNumber"])
+        queue.append(i["number"])
     return queue
 
 # Geth
@@ -191,7 +191,7 @@ def decodeBlock(block):
 
 def makeTx(blockNumber,txNumber,timestamp,sender,to,value,isContractCreation,data,gas,gasPrice,fromContract,toContract):
     tx = {
-        "blockNumber": int(blockNumber, 16),
+        "number": int(blockNumber, 16),
         "txNumber": txNumber,
         "timestamp": int(timestamp, 16),
         "from": sender,

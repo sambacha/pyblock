@@ -34,7 +34,6 @@ for data in datasets:
 		for timepoint in ordered:
 			volume=0
 			for tag in tags:
-				#the [2] is just the number of tx. [1] --> dollar, [0]--> ether
 				volume+=data[timepoint][tag][measure]
 			volumes[timepoint]=volume
 
@@ -67,8 +66,6 @@ for data in datasets:
 		fig = plt.figure()
 		plot = fig.add_subplot(1,1,1)
 		convertedValues = mdate.epoch2num(x)
-		#dollar = fig.add_subplot(2,2,2)
-		#number = fig.add_subplot(2,2,3)
 		pal = sns.color_palette("Set2", 10)
 		plot.stackplot(convertedValues,y,labels=tags,colors=pal, alpha=0.4 )
 		plot.spines["top"].set_visible(False)  

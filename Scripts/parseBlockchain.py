@@ -18,5 +18,7 @@ print("Booting processes.")
 # Catch up with the crawler
 c = Crawler.Crawler()
 
+print("completed")
 
-print("Update complete.")
+ContractMap(c.mongo_client, last_block=c.max_block_mongo)
+

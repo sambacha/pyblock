@@ -14,34 +14,7 @@ DIR = "."
 
 
 class ContractMap(object):
-    """
-    A hash map of all contract addresses in the Ethereum network.
 
-    Public functions:
-
-    - find(): searches all blocks after self.last_block and adds them
-            to the table. Updates self.last_block
-    - save(): saves the object to a pickle file ".contracts.p"
-    - load(): loads the object from pickle file ".contracts.p"
-
-    Attributes:
-
-    - addresses: defaultdict with default value of 0 for non-contracts and
-        values of 1 for contract addresses.
-
-    Usage:
-
-    # If a mongo_client is passed, the ContractMap will scan geth via RPC
-    # for new contract addresses starting at "last_block".
-    cmap = ContractMap(mongo_client, last_block=90000, filepath="contracts.p")
-    cmap.save()
-
-    # If None is passed for a mongo_client, the ContractMap will automatically
-    # load the map of addresses from the pickle file specified in "filepath",
-    # ./contracts.p by default.
-    cmap = ContractMap()
-
-    """
 
     def __init__(self,
                  mongo_client=None,
@@ -66,7 +39,6 @@ class ContractMap(object):
             self.save()
 
     def _checkGeth(self):
-        """Make sure geth is running in RPC on port 8545."""
         try:
             self._rpcRequest("eth_getBlockByNumber", [1, True], "id")
             return
@@ -121,13 +93,7 @@ class ContractMap(object):
                                 notFound=False
                             counter2 += 1
 
-                        #for t in ts:
-                        #    if not "nonce" in txn:
-                        #        if txn["from"] == t["from"] and txn["to"] == t["to"] and txn["input"] == t["input"] and txn["gas"] == t["gas"] and txn["gasPrice"] == t["gasPrice"]:
-                        #            txn["nonce"] = t["nonce"]
-                        #            to = "0x" + encode_hex(mk_contract_address(txn["from"], int(txn["nonce"], 16)))
-                        #            self.addresses[to] = 3
-                    elif not self.addresses[txn["to"]]:
+            elif not self.addresses[txn["to"]]:
                         self.addresses[txn["to"]] = 1
                     if not self.addresses[txn["from"]]:
                        self.addresses[txn["from"]] = 2

@@ -14,10 +14,6 @@ if __name__=="__main__":
     collection=client["blockchainExtended2"]["blocks"]
 
 
-
-
-
-
     with open('data/genesis_block.json') as data_file:
         data = json.load(data_file)
     genesisAddresses = []

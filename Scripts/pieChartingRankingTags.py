@@ -33,7 +33,7 @@ for measure in [0,1,2]:
 print(algorithms)
 
 labels=['Exchanges','Tokens','Mining Pools','Dapps','Scam','Eth Developer','Genesis','Untagged']
-measureNames=["ether","dollar","txNumber"]
+measureNames=["txNumber","ether","dollar"]
 
 algoNames=["in","out","pr","auth","hub"]
 for i in range(len(algoNames)):

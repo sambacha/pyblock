@@ -1,113 +1,79 @@
-# Ethereum Blockchain Parser
+# Acknowledgement!
+This is a fork of the github Repository https://github.com/alex-miller-0/Ethereum_Blockchain_Parser/ from Alex Miller and some of his code and structure in the Analysis and Preprocessing folder to parse the blockchain and build a transaction graph is obtained!
 
-This is a project to parse the Ethereum blockchain from a local geth node. Blockchains are perfect data sets because they contain every transaction ever made on the network. This is valuable data if you want to analyze the network, but Ethereum stores its blockchain in [RLP](https://github.com/ethereum/wiki/wiki/RLP) encoded binary blobs within a series of LevelDB files and these are surprisingly difficult to access, even given the available tools. This project takes the approach of querying a local node via [JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC), which returns unencoded transactional data, and then moves that data to a mongo database.
-
-### Backfilling your Mongo database
-
-To get data from the blockchain as it exists now and then stop parsing, simply run the following scripts, which are located in the `Scripts` directory. Note that at the time of writing, the Ethereum blockchain has about 1.5 million blocks so this will likely take several hours.
-
-1. Funnel the data from geth to MongoDB:
+The python scripts in the Scripts folder are all written by me for the master thesis analysis of the Ethereum main network.
 
 
-        python3 preprocess.py
+# Prerequisites
+Following tools must be installed.
+
+## Geth
+[Geth](https://github.com/ethereum/go-ethereum/wiki/Geth) is the Go implementation of a full Ethereum node. 
+
+## graph-tool
+[graph-tool](https://graph-tool.skewed.de/) graph analysis tool.
+
+## python 3
+[python3](https://www.python.org/downloads/release/python-352/) programming language python 3
+
+## MongoDB
+[mongoDB](https://www.mongodb.com/)
+
+# Setup
+##Project
+Clone this github project.
+execute in rootfolder: `install -r requirements.txt`
+
+##Download Blockchain
+execute on a shell `geth`  to download the blocks until at least block 4'700'000 (may take many hours)
+
+##Parse to mongodb
+execute on a shell `geth --rpc` to start the JSON RPC API of the blockchain
+execute on a shell `mongod` to start the database
+execute `python3 parseBlockchain.py` in the Scripts folder of the project to parse the blockchain to the mongoDB
+
+##build Transaction graph
+execute `python3 buildTransactionGraphs.py` to build the transaction graph (takes several hours!). The graph is saved as graph.gt to the data/graphs/ folder. For the build graph it is alrdy saved on the DVD in that folder.
 
 
-Before using this tool to analyze your copy of the blockchain, you need the following things:
-
-### Geth
-[Geth](https://github.com/ethereum/go-ethereum/wiki/Geth) is the Go implementation of a full Ethereum node. We will need to run it with the `--rpc` flag in order to request data (**WARNING** if you run this on a geth client containing an account that has ether in it, make sure you put a firewall 8545 or whatever port you run geth RPC on).
-
-A geth instance downloads the blockchain and processes it, saving the blocks as LevelDB files in the specified data directory (`~/.ethereum/chaindata` by default). The geth instance can be queried via RPC with the `eth_getBlockByNumber([block, true])` endpoint (see [here](https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_getblockbynumber)) to get the `X-th` block (with `true` indicating we want the transactional data included), which returns data of the form:
-
-    {
-      number: 1000000,
-      timestamp: 1465003569,
-      ...
-      transactions: [
-        {
-          blockHash: "0x2052ce710a08094b81b5047ea9df5119773ce4b263a23d86659fa7293251055e",
-          blockNumber: 1284937,
-          from: "0x1f57f826caf594f7a837d9fc092456870a289365",
-          gas: 22050,
-          gasPrice: 20000000000,
-          hash: "0x654ac26084ee6e40767e8735f38274ef5f594454a4d34cfdd70c93aa95be0c64",
-          input: "0x",
-          nonce: 6610,
-          to: "0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98",
-          transactionIndex: 27,
-          value: 201544820000000000
-        }
-      ]
-    }
-
-Since I am only interested in `number`, `timestamps`, and `transactions` for this application, I have omitted the rest of the data, but there is lots of additional information in the block (explore [here](https://etherchain.org/blocks)), including a few Merkle trees to maintain hashes of state, transactions, and receipts (read [here](https://blog.ethereum.org/2015/11/15/merkling-in-ethereum/).
-
-Using the `from` and `to` addresses in the `transactions` array, I can map the flow of ether through the network as time processes. Note that the value, gas, and gasPrice are in Wei, where 1 Ether = 10<sup>18</sup> Wei. The numbers are converted into Ether automatically with this tool.
-
-### MongoDB
-
-We will use mongo to essentially copy each block served by Geth, preserving its structure. The data outside the scope of this analysis will be omitted. Note that this project also requires pymongo.
-
-### graph-tool
-
-[graph-tool](https://graph-tool.skewed.de/) is a python library written in C to construct graphs quickly and has a flexible feature set for mapping properties to its edges and vertices. Depending on your system, this may be tricky to install, so be sure and follow their instructions carefully. I recommend you find some way to install it with a package manager because building from source is a pain.
-
-### python3
-
-This was written for python 3.4. Some things will probably break if you try to do this analysis in python 2.
-
-
-## Workflow
-
-The following outlines the procedure used to turn the data from bytes on the blockchain to data in a CSV file.
-
-### 1. Process the blockchain
-
-Preprocessing is done with the `Crawler` class, which can be found in the `Preprocessing/Crawler` directory. Before instantiating a `Crawler` object, you need to have geth and mongo processes running. Starting a `Crawler()` instance will go through the processes of requesting and processing the blockchain from geth and copying it over to a Mongo collection named `transactions`. Once copied over, you can close the `Crawler()` instance.
-
-
-
-
-##Download Blockchain:
-geth
-
-##Parse to mongodb:
-geth --rpc
-mongod
-parseBlockchain
-
-##Addresses:
-ContractMap
+# Information Retrievel
+All scripts to retrieve the data for analysis and plot/chart creation are in the Scripts/-folder!
 
 ##powerLaw
-currently in: graphAnalysis.py
+`python3 plottingPowerLaw.py` plots are saved to powerLaw/
 
 ##Generate DataSet Information:
-mongod
-retrieveDataSetInformations.py
-plottingIntervalsOfTransactionValues.py
-plottingIntervalsOfBlockValues.py
+run `mongod` on another shell
+`python3 retrieveDataSetInformations.py` jsons saved to timeseries/ folder
+`python3 plottingIntervalsOfTransactionValues.py` plots saved to timeseries/figures/
+`python3 plottingIntervalsOfBlockValues.py` plots saved to timeseries/figures/
 
-##GenesisAnalysis
-genesisEtherLoss.py
-plottingLosingEther.py
 
-##graphAnalysis
-mongod
-buildTransactionGraphs.py
-graphAnalysis.py
-generateGraphAnalysisCharts.py
+##graphAnalysis rankings
+run `mongod` on another shell
+`python3 graphAnalysis.py` jsons saved to rankings/ folder
+`python3 pieChartingRankingTags.py`  pie charts saved to rankings/ folder
 
 
 ##Tagging transactions
-mongod
-taggedAnalysis.py
-plottingTaggedTransactionVolumes.py
-plottingOnlyTaggedTransactionVolumes.py
-plottingOnlyUntaggedTransactionVolumes.py
+run `mongod` on another shell
+`python3 taggedAnalysis.py`
+`python3 plottingTaggedTransactionVolumes.py` tagged_timeseries/
+`python3 plottingOnlyTaggedTransactionVolumes.py` plots saved to tagged_timeseries/OnlyTagged/
+`python3 plottingOnlyUntaggedTransactionVolumes.py` plots saved to tagged_timeseries/OnlyUntagged/
 
 
 ##Volumes over time 
-mongod
-taggedAnalysis.py
-plottingVolumesTotal.py
+run `mongod` on another shell
+`python3 taggedAnalysis.py`
+`python3 plottingVolumesTotal.py` plots saved to tagged_timeseries/totalVolumes/
+
+
+##GenesisAnalysis
+`python3 genesisEtherLoss.py`
+`python3 plottingLosingEther.py`
+results are saved to the genesisLoss/ folder
+
+##Motif detection
+
+`python3 smallGraphAnaylsis.py` saves pictures of motifs with number of occurances in the name to motifs/2 and motifs/3

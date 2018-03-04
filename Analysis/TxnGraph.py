@@ -16,51 +16,7 @@ DIR = env["mongo"] + "/data"
 DATADIR = env["txn_data"]
 
 class TxnGraph(object):
-    """
-    Create a snapshot of the Ethereum network.
 
-    Description:
-    ------------
-    Create a snapshot, which contains a graph, out of transactions stored in a
-    mongo collection. Each snapshot must start at some time t0 (start_block)
-    and end at time tf (end_block). It will include all nodes that sent or
-    received a transaction between t0 and tf.
-
-
-    Parameters:
-    -----------
-    start_block <int>              # The lower bound of the block range to
-                                   # be analysed.
-    end_block <int>                # The upper range of the block range to
-                                   # be analysed.
-    previous <dict>                # Previous graph and its end_block
-    snap <bool> (default=True)     # Build the graph upon instantiation.
-    save <bool> (default=True)     # Save the graph automatically
-    load <bool> (default=False)    # Skip building the graph and load a
-
-
-    Usage:
-    ------
-    Initialize with a previous graph:
-
-        g = TxnGraph(previous={graph: <Graph>, end_block: <int>})
-
-    Draw the image (saved by default to DATADIR/snapshots/a_b.png,
-    where a=start_block, b=end_block):
-
-        g.draw()
-
-    Save the state of the object (including the graph):
-
-        g.save()
-
-    Load a graph with start_block=a, end_block=b from DATADIR if it exists:
-
-        g.load(a, b)
-
-    """
-
-    # PRIVATE
 
     def __init__(self,
                 *args,
@@ -336,25 +292,6 @@ class TxnGraph(object):
     # PUBLIC
     # ------
     def snap(self):
-        """
-        Take a snapshot of the graph of transactions.
-
-        Description:
-        ------------
-        This essentially builds a graph with addresses (vertices) and
-        transactions (edges). It also adds a PropertyMap of <double>s to the
-        graph corresponding to transaction amounts (i.e. weights). The default
-        behavior of this is to initialize a new graph with data between
-        start_block and end_block, however it can be used with the 'extend'
-        method.
-
-        Parameters:
-        -----------
-        start <int>, default self.start_block: the absolute block to start with
-        end <int>, default self.end_block: the absolute block to end with
-        """
-
-        # Set up the mongo client
         client, popen = self._getMongoClient()
 
         # Add PropertyMaps
@@ -453,90 +390,3 @@ class TxnGraph(object):
             self.__dict__.update(tmp)
             self.graph = tmp_graph
             input.close()
-
-    def draw(self, **kwargs):
-        """
-        Draw the graph.
-
-        Description:
-        ------------
-        Draw the graph and save to a .png file indexed by the start and
-        end block of the TxnGraph
-
-        Parameters:
-        -----------
-        w <int> (optional, default=5000): width
-        h <int> (optional, default=5000): height
-        """
-        w = kwargs["w"] if "w" in kwargs else 1920*2
-        h = kwargs["h"] if "h" in kwargs else 1080*2
-
-        # We want the vertices to be sized proportional to the number of
-        # transactions they are part of
-        # deg = self.graph.degree_property_map("total")
-        deg = copy.deepcopy(self.graph.vertex_properties['weight'])
-
-        # Don't draw an empty graph
-        if not self.graph.num_vertices():
-            print("Nothing to draw!")
-            return
-
-        # Testing to allow negative numbers
-        deg.a = abs(deg.a)**0.5
-
-        # For some reason this works
-        # (TODO figure out how to scale this consistently)
-        # deg.a = deg.a**0.5
-
-        # We want the largest node to be roughly 10%
-        # of the width of the image (somewhat arbitrary)
-        scale = (0.03*w)/max(deg.a)
-        deg.a = deg.a*scale
-
-        # For some reason this doesn't work
-        # deg.a = deg.a*scale # For some reason this blows up the output
-
-        # Set K=scale because we want the average edge length
-        # to be the size of the largest node
-        pos = random_layout(self.graph, shape=(w, h), dim=2)
-
-        print("start draw")
-        # Draw the graph
-        graph_draw(self.graph,
-            pos=pos,
-            vertex_size=deg,
-            vertex_fill_color=deg,
-            pen_width=0,
-            bg_color=[1,1,1,1],
-            output=self.f_snapshot,
-            output_size=(w,h),
-            fit_view=True
-        )
-
-    def extend(self, n, save=True):
-        """
-        Add n blocks to the current TxnGraph instance.
-
-        Description:
-        ------------
-        Rather than creating a bunch of TxnGraph instances from scratch,
-        this method can be used to add n blocks to the existing TxnGraph
-        instance. It can be called multiple times to iterate over the block
-        chain with resolution of n blocks. The extended TxnGraph will be
-        saved by default.
-
-        Parameters:
-        -----------
-        n <int>: number of blocks to add (from the last_block)
-        save <bool>, default True: save the new state automatically
-        """
-        old_end = self.end_block
-        new_end = self.end_block + n
-
-        client, popen = self._getMongoClient()
-        self._addBlocks(client, old_end, new_end)
-        self.end_block = new_end
-        self._setFilePaths()
-
-        if save:
-            self.save()

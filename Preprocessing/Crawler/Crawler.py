@@ -21,37 +21,7 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
 class Crawler(object):
-    """
-    A client to migrate blockchain from geth to mongo.
-
-    Description:
-    ------------
-    Before starting, make sure geth is running in RPC (port 8545 by default).
-    Initializing a Crawler object will automatically scan the blockchain from
-    the last block saved in mongo to the most recent block in geth.
-
-    Parameters:
-    -----------
-    rpc_port: <int> default 8545 	# The port on which geth RPC can be called
-    host: <string> default "http://localhost" # The geth host
-    start: <bool> default True		# Create the graph upon instantiation
-
-    Usage:
-    ------
-    Default behavior:
-        crawler = Crawler()
-
-    Interactive mode:
-        crawler = Crawler(start=False)
-
-    Get the data from a particular block:
-        block = crawler.getBlock(block_number)
-
-    Save the block to mongo. This will fail if the block already exists:
-        crawler.saveBlock(block)
-
-    """
-
+   
 
     def __init__(
         self,
@@ -118,31 +88,7 @@ class Crawler(object):
 
 
     def retrieveUncles(self, blockHash, height):
-        # {
-        #     "jsonrpc": "2.0",
-        #     "id": 1,
-        #     "result": {
-        #         "difficulty": "0x57f117f5c",
-        #         "extraData": "0x476574682f76312e302e302f77696e646f77732f676f312e342e32",
-        #         "gasLimit": "0x1388",
-        #         "gasUsed": "0x0",
-        #         "hash": "0x932bdf904546a2287a2c9b2ede37925f698a7657484b172d4e5184f80bdd464d",
-        #         "logsBloom": "0x000000",
-        #         "miner": "0x5bf5e9cf9b456d6591073513de7fd69a9bef04bc",
-        #         "mixHash": "0x4500aa4ee2b3044a155252e35273770edeb2ab6f8cb19ca8e732771484462169",
-        #         "nonce": "0x24732773618192ac",
-        #         "number": "0x299",
-        #         "parentHash": "0xa779859b1ee558258b7008bbabff272280136c5dd3eb3ea3bfa8f6ae03bf91e5",
-        #         "receiptsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-        #         "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-        #         "size": "0x21d",
-        #         "stateRoot": "0x2604fbf5183f5360da249b51f1b9f1e0f315d2ff3ffa1a4143ff221ad9ca1fec",
-        #         "timestamp": "0x55ba4827",
-        #         "totalDifficulty": null,
-        #         "transactionsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-        #         "uncles": []
-        #     }
-        # }
+       
 
         uncleCountHex = self._rpcRequest("eth_getUncleCountByBlockHash",[blockHash],"result")
         uncleCount = int(uncleCountHex, 16)
@@ -152,7 +98,6 @@ class Crawler(object):
             newBlock = {
                "miner":uncleBlock["miner"],
                "reward": (8 - (height-int(uncleBlock["number"], 16))) / 8 * 5
-              # "reward": (8 - (int(uncleBlock["number"], 16)-height)) / 8 * 5 ==> 10-reward
             }
             uncles.append(newBlock)
         return uncles

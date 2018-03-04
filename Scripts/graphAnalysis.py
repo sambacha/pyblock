@@ -40,12 +40,6 @@ measurementNames=["number","ether","dollar"]
 
 for measure in [0,1,2]:
 	print("Starting with measurement: "+measurementNames[measure])
-	# inDegrees=tmp_graph.get_in_degrees(range(tmp_graph.get_vertices().size),eweight=measurements[measure])
-	# tmp_graph.vp.ins=inDegrees
-	# print("calculated inDegrees")
-	# outDegrees=tmp_graph.get_out_degrees(range(tmp_graph.get_vertices().size),eweight=measurements[measure])
-	# tmp_graph.vp.outs=outDegrees
-	# print("calculated outDegrees")
 	pagerank=graph_tool.centrality.pagerank(tmp_graph,weight =measurements[measure])
 	tmp_graph.vp.pr=pagerank
 	print("calculated pageranks")
@@ -86,116 +80,25 @@ for measure in [0,1,2]:
 	allsorted=[inSorted,outSorted,prSorted,authSorted,hubSorted]
 
 	allTaggedRanks=[]
+	topTens=[]
 
 	for oneSorted in allsorted:
 		rank=10000
 		TaggedRanks=[]
+		topTen=[]
 		for topranked in oneSorted[-10000:]:
 			addr=tmp_graph.vp.address[int(topranked[0])]
 			if addr in tags:
 				taggedRank=[addr,str(tags[addr]),str(rank)]
 				TaggedRanks.append(taggedRank)
-				print('TAGGED')
+			if rank<11:
+				topTen.append([str(rank),addr])
 			rank-=1
 		allTaggedRanks.append(TaggedRanks)
+		topTens.append(topTen)
 
-	with open(measurementNames[measure]+'taggedRankings.json', 'w') as outfile:
+	with open('rankings/'+measurementNames[measure]+'taggedRankings.json', 'w') as outfile:
 		json.dump(allTaggedRanks, outfile)
 
-
-
-
-
-
-
-
-
-# print("StartPagerank:")
-# pagerankNumber=graph_tool.centrality.pagerank(tmp_graph)
-# pagerankEther=graph_tool.centrality.pagerank(tmp_graph,weight =tmp_graph.ep.weight)
-# pagerankDollar=graph_tool.centrality.pagerank(tmp_graph,weight =tmp_graph.ep.dollar)
-# print("calculated pagerank After: " + str(time.time()-t))
-
-
-# tmp_graph.vp.prNumber=pagerankNumber
-# tmp_graph.vp.prEther=pagerankEther
-# tmp_graph.vp.prDollar=pagerankDollar
-
-
-
-# pagerankingNumber=[]
-# pagerankingEther=[]
-# pagerankingDollar=[]
-# counter=0
-
-# #creating address pagerank association
-# for v in tmp_graph.vertices():
-# 	number=[tmp_graph.vp.prNumber[v],tmp_graph.vp.address[v]]
-# 	ether=[tmp_graph.vp.prEther[v],tmp_graph.vp.address[v]]
-# 	dollar=[tmp_graph.vp.prDollar[v],tmp_graph.vp.address[v]]
-# 	pagerankingNumber.append(number)
-# 	pagerankingEther.append(ether)
-# 	pagerankingDollar.append(dollar)
-# 	counter+=1
-# 	if counter%100000 == 0:
-# 		print(counter)
-
-
-# #convert from array to ndarray
-# print("Create Numpy Arrays: " + str(time.time()-t))
-# numpiedNumber=np.array(pagerankingNumber)
-# numpiedEther=np.array(pagerankingEther)
-# numpiedDollar=np.array(pagerankingDollar)
-# print("Created Numpy Arrays: " + str(time.time()-t))
-
-# #sort by first column
-# print("Sort Numpy Arrays: " + str(time.time()-t))
-# numpiedNumberSorted=numpiedNumber[numpiedNumber[:,0].argsort()]
-# numpiedEtherSorted=numpiedEther[numpiedEther[:,0].argsort()]
-# numpiedDollarSorted=numpiedDollar[numpiedDollar[:,0].argsort()]
-# print("Sorted Numpy Arrays: " + str(time.time()-t))
-
-# #give top 10 rated addresses
-
-# place=1
-# rankingsNumber={}
-
-# for i in numpiedNumberSorted.tolist()[:10000]:
-# 	if i[1] in tags:
-# 		rankingsNumber[str(i[1])]=[str(tags[i[1]]),str(place)]
-# 	place+=1
-
-# with open('pagerankNumber.json', 'w') as outfile:
-#     json.dump(rankingsNumber, outfile)
-
-
-
-# place=1
-# rankingsEther={}
-
-# for i in numpiedEtherSorted.tolist()[:10000]:
-# 	if i[1] in tags:
-# 		rankingsEther[str(i[1])]=[str(tags[i[1]]),str(place)]
-# 	place+=1
-
-# with open('pagerankEther.json', 'w') as outfile:
-#     json.dump(rankingsEther, outfile)
-
-
-# place=1
-# rankingsDollar={}
-
-# for i in numpiedDollarSorted.tolist()[:10000]:
-# 	if i[1] in tags:
-# 		rankingsDollar[str(i[1])]=[str(tags[i[1]]),str(place)]
-# 	place+=1
-# with open('pagerankDollar.json', 'w') as outfile:
-#     json.dump(rankingsDollar, outfile)
-
-
-
-
-# print("StartHits:")
-# graph_tool.centrality.hits(tmp_graph)
-# print("calculated hits After: " + str(time.time()-t))
-
+	with open('rankings/'+measurementNames[measure]+'topTen.json', 'w') as outfile:
+		json.dump(topTens, outfile)
