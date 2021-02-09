@@ -1,8 +1,6 @@
-# Acknowledgement!
+# pyblock
 
 This is a fork of the github Repository https://github.com/alex-miller-0/Ethereum_Blockchain_Parser/ from Alex Miller and some of his code and structure in the Analysis and Preprocessing folder to parse the blockchain and build a transaction graph is obtained!
-
-The python scripts in the Scripts folder are all written by me for the master thesis analysis of the Ethereum main network.
 
 # Prerequisites
 
@@ -79,3 +77,7 @@ results are saved to the genesisLoss/ folder
 ##Motif detection
 
 `python3 smallGraphAnaylsis.py` saves pictures of motifs with number of occurances in the name to motifs/2 and motifs/3
+
+## License
+
+MIT
