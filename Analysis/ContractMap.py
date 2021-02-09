@@ -1,5 +1,3 @@
-"""Build a hash map of all contract addresses on the Ethereum network."""
-
 from collections import defaultdict
 import requests
 import json
@@ -14,13 +12,13 @@ DIR = "."
 
 
 class ContractMap(object):
-
-
-    def __init__(self,
-                 mongo_client=None,
-                 last_block=0,
-                 load=False,
-                 filepath="{}/.contracts.p".format(DIR)):
+    def __init__(
+        self,
+        mongo_client=None,
+        last_block=0,
+        load=False,
+        filepath="{}/.contracts.p".format(DIR),
+    ):
         """Initialize with a mongo client and an optional last block."""
         self.client = mongo_client
         self.last_block = last_block
@@ -47,15 +45,10 @@ class ContractMap(object):
 
     def _rpcRequest(self, method, params, key):
         """Make an RPC request to geth on port 8545."""
-        payload = {
-            "method": method,
-            "params": params,
-            "jsonrpc": "2.0",
-            "id": 0
-        }
-        res = self.session.post(self.url,
-                            data=json.dumps(payload),
-                            headers=self.headers, stream=True).json()
+        payload = {"method": method, "params": params, "jsonrpc": "2.0", "id": 0}
+        res = self.session.post(
+            self.url, data=json.dumps(payload), headers=self.headers, stream=True
+        ).json()
 
         # Geth will sometimes crash if overloaded with requests
 
@@ -68,9 +61,7 @@ class ContractMap(object):
         Iterate through all blocks and search for new contract addresses.
         Append them to self.addresses if found.
         """
-        blocks = self.client.find(
-            {"number": {"$lt": 4370000}}
-        ).sort("number", 1 )
+        blocks = self.client.find({"number": {"$lt": 4370000}}).sort("number", 1)
         counter = 0
         for block in blocks:
             if block["transactions"]:
@@ -78,25 +69,39 @@ class ContractMap(object):
                 # Add all the nodes to a global set (self.nodes)
                 for txn in block["transactions"]:
                     if txn["to"] == None:
-                        ts = self._rpcRequest("eth_getBlockByNumber", [hex(block["number"]), True], "result")["transactions"]
+                        ts = self._rpcRequest(
+                            "eth_getBlockByNumber",
+                            [hex(block["number"]), True],
+                            "result",
+                        )["transactions"]
 
-                        notFound =True
+                        notFound = True
                         counter2 = 0
-                        while(notFound):
-                            t=ts[counter2]
-                            if txn["from"] == t["from"] and txn["to"] == t["to"] and txn["input"] == t["input"] and txn[
-                                "gas"] == t["gas"] and txn["gasPrice"] == t["gasPrice"] and not "used" in t:
+                        while notFound:
+                            t = ts[counter2]
+                            if (
+                                txn["from"] == t["from"]
+                                and txn["to"] == t["to"]
+                                and txn["input"] == t["input"]
+                                and txn["gas"] == t["gas"]
+                                and txn["gasPrice"] == t["gasPrice"]
+                                and not "used" in t
+                            ):
                                 txn["nonce"] = t["nonce"]
-                                to = "0x" + encode_hex(mk_contract_address(txn["from"], int(txn["nonce"], 16)))
+                                to = "0x" + encode_hex(
+                                    mk_contract_address(
+                                        txn["from"], int(txn["nonce"], 16)
+                                    )
+                                )
                                 self.addresses[to] = 3
-                                ts[counter2]["used"]=True
-                                notFound=False
+                                ts[counter2]["used"] = True
+                                notFound = False
                             counter2 += 1
 
             elif not self.addresses[txn["to"]]:
-                        self.addresses[txn["to"]] = 1
-                    if not self.addresses[txn["from"]]:
-                       self.addresses[txn["from"]] = 2
+                self.addresses[txn["to"]] = 1
+                if not self.addresses[txn["from"]]:
+                    self.addresses[txn["from"]] = 2
 
             if not self.addresses[block["miner"]]:
                 self.addresses[block["miner"]] = 4
@@ -112,13 +117,11 @@ class ContractMap(object):
                 print("Done with block {}...".format(self.last_block))
                 self.save()
 
-            with open('./Scripts/data/genesis_block.json') as data_file:
+            with open("./Scripts/data/genesis_block.json") as data_file:
                 data = json.load(data_file)
 
             for addr in data:
                 self.addresses["0x" + addr] = 6
-
-
 
     def save(self):
         """Pickle the object and save it to a file."""

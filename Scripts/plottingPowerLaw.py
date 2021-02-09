@@ -1,5 +1,6 @@
 import matplotlib
-matplotlib.use('Agg')
+
+matplotlib.use("Agg")
 from pylab import *
 import time
 from graph_tool.all import *
@@ -15,11 +16,11 @@ import datetime
 
 
 t = time.time()
-print("Starting at: " + str(time.time()-t))
+print("Starting at: " + str(time.time() - t))
 
 tmp_graph = load_graph("data/graphs/graph.gt")
 
-print("loaded After: " + str(time.time()-t))
+print("loaded After: " + str(time.time() - t))
 
 indegrees = []
 outdegrees = []
@@ -27,16 +28,16 @@ comdegrees = []
 
 
 for i in tmp_graph.vertices():
-	indegrees.append(i.in_degree())
-print("In After: " + str(time.time()-t))
+    indegrees.append(i.in_degree())
+print("In After: " + str(time.time() - t))
 
 for i in tmp_graph.vertices():
-	outdegrees.append(i.out_degree())
-print("Out After: " + str(time.time()-t))
+    outdegrees.append(i.out_degree())
+print("Out After: " + str(time.time() - t))
 
 for i in tmp_graph.vertices():
-	comdegrees.append(i.out_degree()+i.in_degree())
-print("Commulated After: " + str(time.time()-t))
+    comdegrees.append(i.out_degree() + i.in_degree())
+print("Commulated After: " + str(time.time() - t))
 
 incounted = Counter(indegrees)
 counted = Counter(outdegrees)
@@ -48,26 +49,26 @@ comsort = sorted(comcounted.items(), reverse=True)
 
 
 fig = plt.figure()
-inax = fig.add_subplot(2,2,1)
-ax = fig.add_subplot(2,2,2)
-comax = fig.add_subplot(2,2,3)
+inax = fig.add_subplot(2, 2, 1)
+ax = fig.add_subplot(2, 2, 2)
+comax = fig.add_subplot(2, 2, 3)
 
-inline, = inax.plot(*zip(*insort),"*")
-line, = ax.plot(*zip(*sort),"*")
-comlin, = comax.plot(*zip(*comsort),"*")
+(inline,) = inax.plot(*zip(*insort), "*")
+(line,) = ax.plot(*zip(*sort), "*")
+(comlin,) = comax.plot(*zip(*comsort), "*")
 
-inax.set_xscale('log')
-inax.set_yscale('log')
+inax.set_xscale("log")
+inax.set_yscale("log")
 inax.set_xlabel("Number of Ingoing TX")
 inax.set_ylabel("Number of address")
 
-ax.set_xscale('log')
-ax.set_yscale('log')
+ax.set_xscale("log")
+ax.set_yscale("log")
 ax.set_xlabel("Number of outgoing TX")
 ax.set_ylabel("Number of address")
 
-comax.set_xscale('log')
-comax.set_yscale('log')
+comax.set_xscale("log")
+comax.set_yscale("log")
 comax.set_xlabel("Number of comulated TX")
 comax.set_ylabel("Number of address")
 

@@ -2,15 +2,18 @@
 
 import subprocess
 import sys
+
 sys.path.append("./../Preprocessing")
 sys.path.append("./../Preprocessing/Crawler")
 sys.path.append("./../Analysis")
 import os
-os.environ['ETH_BLOCKCHAIN_ANALYSIS_DIR'] = './../Preprocessing/'
+
+os.environ["ETH_BLOCKCHAIN_ANALYSIS_DIR"] = "./../Preprocessing/"
 from Crawler import Crawler
 from ContractMap import ContractMap
 import subprocess
 import time
+
 LOGDIR = "./../Preprocessing/logs"
 
 
@@ -21,4 +24,3 @@ c = Crawler.Crawler()
 print("completed")
 
 ContractMap(c.mongo_client, last_block=c.max_block_mongo)
-

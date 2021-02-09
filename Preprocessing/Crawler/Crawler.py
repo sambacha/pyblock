@@ -9,26 +9,21 @@ import os
 import logging
 import time
 import tqdm
+
 sys.path.append(os.path.realpath(os.path.dirname(__file__)))
 
 DIR = "/mnt/c/data/db"
 LOGFIL = "crawler.log"
 if "BLOCKCHAIN_ANALYSIS_LOGS" in os.environ:
-    LOGFIL = "{}/{}".format(os.environ['BLOCKCHAIN_ANALYSIS_LOGS'], LOGFIL)
+    LOGFIL = "{}/{}".format(os.environ["BLOCKCHAIN_ANALYSIS_LOGS"], LOGFIL)
 crawler_util.refresh_logger(LOGFIL)
 logging.basicConfig(filename=LOGFIL, level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
 class Crawler(object):
-   
-
     def __init__(
-        self,
-        start=True,
-        rpc_port=8545,
-        host="http://localhost",
-        delay=0.0001
+        self, start=True, rpc_port=8545, host="http://localhost", delay=0.0001
     ):
         """Initialize the Crawler."""
         print("Starting Crawler")
@@ -48,26 +43,19 @@ class Crawler(object):
         # The delay between requests to geth
         self.delay = delay
 
-        self.session=requests.Session()
+        self.session = requests.Session()
 
         if start:
             self.max_block_mongo = self.highestBlockMongo()
-            self.max_block_geth =  4369999 #self.highestBlockEth()
+            self.max_block_geth = 4369999  # self.highestBlockEth()
             self.run()
 
     def _rpcRequest(self, method, params, key):
         """Make an RPC request to geth on port 8545."""
-        payload = {
-            "method": method,
-            "params": params,
-            "jsonrpc": "2.0",
-            "id": 0
-        }
+        payload = {"method": method, "params": params, "jsonrpc": "2.0", "id": 0}
         """time.sleep(self.delay)"""
-        data=json.dumps(payload)
-        res = self.session.post(
-              self.url,
-              data, stream=True).json()
+        data = json.dumps(payload)
+        res = self.session.post(self.url, data, stream=True).json()
         return res[key]
 
     def getBlock(self, n):
@@ -77,27 +65,30 @@ class Crawler(object):
         block = crawler_util.decodeBlock(data)
         uncleHash = data["hash"]
         if data["uncles"]:
-            uncles = self.retrieveUncles(uncleHash,block["number"])
+            uncles = self.retrieveUncles(uncleHash, block["number"])
             block["uncles"] = uncles
         return block
 
     def getMiner(self, n):
-        miner = self._rpcRequest("eth_getBlockByNumber", [hex(n), False], "result")["miner"]
-        crawler_util.insertMiner(self.mongo_client,n,miner)
-
-
+        miner = self._rpcRequest("eth_getBlockByNumber", [hex(n), False], "result")[
+            "miner"
+        ]
+        crawler_util.insertMiner(self.mongo_client, n, miner)
 
     def retrieveUncles(self, blockHash, height):
-       
 
-        uncleCountHex = self._rpcRequest("eth_getUncleCountByBlockHash",[blockHash],"result")
+        uncleCountHex = self._rpcRequest(
+            "eth_getUncleCountByBlockHash", [blockHash], "result"
+        )
         uncleCount = int(uncleCountHex, 16)
         uncles = []
         for i in range(uncleCount):
-            uncleBlock = self._rpcRequest("eth_getUncleByBlockHashAndIndex",[blockHash,hex(i)],"result")
+            uncleBlock = self._rpcRequest(
+                "eth_getUncleByBlockHashAndIndex", [blockHash, hex(i)], "result"
+            )
             newBlock = {
-               "miner":uncleBlock["miner"],
-               "reward": (8 - (height-int(uncleBlock["number"], 16))) / 8 * 5
+                "miner": uncleBlock["miner"],
+                "reward": (8 - (height - int(uncleBlock["number"], 16))) / 8 * 5,
             }
             uncles.append(newBlock)
         return uncles
@@ -135,13 +126,13 @@ class Crawler(object):
         else:
             self.saveBlock({"number": n, "transactions": []})
 
-
     def add_miner(self, n):
         """Add a block to mongo."""
 
         self.getMiner(n)
-       # else:
-        #    self.saveBlock({"number": n, "transactions": []})
+
+    # else:
+    #    self.saveBlock({"number": n, "transactions": []})
 
     def run(self):
         """
@@ -152,8 +143,7 @@ class Crawler(object):
         """
         print("Processing geth blockchain:")
         print("Highest block found as: {}".format(self.max_block_geth))
-        print("Number of blocks to process: {}".format(
-            len(self.block_queue)))
+        print("Number of blocks to process: {}".format(len(self.block_queue)))
 
         # Make sure the database isn't missing any blocks up to this point
         logging.debug("Verifying that mongo isn't missing any blocks...")
@@ -183,7 +173,7 @@ class Crawler(object):
         print("Processing remainder of the blockchain...")
         for n in tqdm.tqdm(range(self.max_block_mongo, self.max_block_geth)):
             self.add_block(hex(n))
-        #for n in tqdm.tqdm(range(3826871, self.max_block_geth)):
-         #  self.add_miner(n)
+        # for n in tqdm.tqdm(range(3826871, self.max_block_geth)):
+        #  self.add_miner(n)
 
         print("Done!\n")

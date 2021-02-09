@@ -33,9 +33,8 @@ def initMongo(client):
     try:
         # Index the block number so duplicate records cannot be made
         db[COLLECTION].create_index(
-			[("number", pymongo.DESCENDING)("number", pymongo.DESCENDING)],
-			unique=True
-		)
+            [("number", pymongo.DESCENDING)("number", pymongo.DESCENDING)], unique=True
+        )
     except:
         pass
 
@@ -95,11 +94,13 @@ def makeBlockQueue(client):
     <deque>
     """
     queue = deque()
-    all_n = client.find({}, {"number":1, "_id":0},
-    		sort=[("number", pymongo.ASCENDING)])
+    all_n = client.find(
+        {}, {"number": 1, "_id": 0}, sort=[("number", pymongo.ASCENDING)]
+    )
     for i in all_n:
         queue.append(i["number"])
     return queue
+
 
 # Geth
 # ----
@@ -156,12 +157,12 @@ def decodeBlock(block):
         # Filter the block
         new_block = {
             "number": int(b["number"], 16),
-            "timestamp": int(b["timestamp"], 16),		# Timestamp is in unix time
-            "transactions": []
+            "timestamp": int(b["timestamp"], 16),  # Timestamp is in unix time
+            "transactions": [],
         }
         # Filter and decode each transaction and add it back
         # 	Value, gas, and gasPrice are all converted to ether
-        reward = float(5.)    
+        reward = float(5.0)
         i = 1
         to = "to"
         isContractCreation = False
@@ -169,7 +170,9 @@ def decodeBlock(block):
         toContract = False
         for t in b["transactions"]:
             if t["to"] == None:
-                to = "0x"+encode_hex(mk_contract_address(t["from"],int(t["nonce"], 16)))
+                to = "0x" + encode_hex(
+                    mk_contract_address(t["from"], int(t["nonce"], 16))
+                )
                 isContractCreation = True
                 contractAddresses.append(to)
             elif t["to"] in contractAddresses:
@@ -178,18 +181,61 @@ def decodeBlock(block):
                 to = t["to"]
             if t["from"] in contractAddresses:
                 fromContract = True
-            tx = makeTx(b["number"],i,b["timestamp"],t["from"],to,float(int(t["value"], 16))/1000000000000000000.,isContractCreation,t["input"],t["gas"],t["gasPrice"],fromContract,toContract)
-            reward += float(int(t["gas"],16)*int(t["gasPrice"],16))/1000000000000000000.
+            tx = makeTx(
+                b["number"],
+                i,
+                b["timestamp"],
+                t["from"],
+                to,
+                float(int(t["value"], 16)) / 1000000000000000000.0,
+                isContractCreation,
+                t["input"],
+                t["gas"],
+                t["gasPrice"],
+                fromContract,
+                toContract,
+            )
+            reward += (
+                float(int(t["gas"], 16) * int(t["gasPrice"], 16))
+                / 1000000000000000000.0
+            )
             txs.append(tx)
             i += 1
-        rewardTx = makeTx(b["number"],0,b["timestamp"],"REWARD",b["miner"],reward,isContractCreation,"","0x0","0x0",False,False)
+        rewardTx = makeTx(
+            b["number"],
+            0,
+            b["timestamp"],
+            "REWARD",
+            b["miner"],
+            reward,
+            isContractCreation,
+            "",
+            "0x0",
+            "0x0",
+            False,
+            False,
+        )
         txs.append(rewardTx)
         return txs
 
     except:
         return None
 
-def makeTx(blockNumber,txNumber,timestamp,sender,to,value,isContractCreation,data,gas,gasPrice,fromContract,toContract):
+
+def makeTx(
+    blockNumber,
+    txNumber,
+    timestamp,
+    sender,
+    to,
+    value,
+    isContractCreation,
+    data,
+    gas,
+    gasPrice,
+    fromContract,
+    toContract,
+):
     tx = {
         "number": int(blockNumber, 16),
         "txNumber": txNumber,
@@ -202,7 +248,7 @@ def makeTx(blockNumber,txNumber,timestamp,sender,to,value,isContractCreation,dat
         "gas": int(gas, 16),
         "gasPrice": int(gasPrice, 16),
         "fromContract": fromContract,
-        "toContract": toContract
+        "toContract": toContract,
     }
     return tx
 
@@ -212,7 +258,20 @@ def decode_genesis_block(block):
         txs = []
         i = 0
         for x in block.keys():
-            tx = makeTx("0x0",0,"0x0","Genesis",x,float(block[x]["wei"])/1000000000000000000.,False,"","0x0","0x0",False,False)
+            tx = makeTx(
+                "0x0",
+                0,
+                "0x0",
+                "Genesis",
+                x,
+                float(block[x]["wei"]) / 1000000000000000000.0,
+                False,
+                "",
+                "0x0",
+                "0x0",
+                False,
+                False,
+            )
             txs.append(tx)
             i += 1
         return txs
@@ -227,4 +286,4 @@ def refresh_logger(filename):
             os.remove(filename)
         except Exception:
             pass
-    open(filename, 'a').close()
+    open(filename, "a").close()
